@@ -8,12 +8,70 @@
 
 /* Begin PBXBuildFile section */
 		711F134E1C40F7ED0096DBAD /* TVMediaPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 711F134D1C40F7ED0096DBAD /* TVMediaPlayer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		711F135A1C40F9560096DBAD /* ControlsOverlay.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 711F13551C40F9560096DBAD /* ControlsOverlay.storyboard */; };
+		711F135B1C40F9560096DBAD /* ControlsOverlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711F13561C40F9560096DBAD /* ControlsOverlayViewController.swift */; };
+		711F135C1C40F9560096DBAD /* MediaPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711F13571C40F9560096DBAD /* MediaPlayerViewController.swift */; };
+		711F135D1C40F9560096DBAD /* MediaItemType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711F13581C40F9560096DBAD /* MediaItemType.swift */; };
+		711F135E1C40F9560096DBAD /* MediaPlayerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711F13591C40F9560096DBAD /* MediaPlayerType.swift */; };
+		711F13601C40FB070096DBAD /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 711F135F1C40FB070096DBAD /* GameController.framework */; };
+		711F13661C41C2900096DBAD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 711F13651C41C2900096DBAD /* Images.xcassets */; };
+		711F13691C41C64D0096DBAD /* DPadState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711F13671C41C64D0096DBAD /* DPadState.swift */; };
+		711F136A1C41C64D0096DBAD /* PlayerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711F13681C41C64D0096DBAD /* PlayerState.swift */; };
+		711F13761C41E3BF0096DBAD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711F13751C41E3BF0096DBAD /* AppDelegate.swift */; };
+		711F13781C41E3BF0096DBAD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711F13771C41E3BF0096DBAD /* ViewController.swift */; };
+		711F137B1C41E3BF0096DBAD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 711F13791C41E3BF0096DBAD /* Main.storyboard */; };
+		711F137D1C41E3BF0096DBAD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 711F137C1C41E3BF0096DBAD /* Assets.xcassets */; };
+		711F13831C41E3D30096DBAD /* TVMediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 711F134A1C40F7ED0096DBAD /* TVMediaPlayer.framework */; };
+		711F13841C41E3D30096DBAD /* TVMediaPlayer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 711F134A1C40F7ED0096DBAD /* TVMediaPlayer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		711F13891C4208E00096DBAD /* TestMediaPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711F13881C4208E00096DBAD /* TestMediaPlayer.swift */; };
+		711F138B1C420EC60096DBAD /* TestPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711F138A1C420EC60096DBAD /* TestPlayerViewController.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		711F13851C41E3D30096DBAD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 711F13411C40F7ED0096DBAD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 711F13491C40F7ED0096DBAD;
+			remoteInfo = TVMediaPlayer;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		711F13871C41E3D30096DBAD /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				711F13841C41E3D30096DBAD /* TVMediaPlayer.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		711F134A1C40F7ED0096DBAD /* TVMediaPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TVMediaPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		711F134D1C40F7ED0096DBAD /* TVMediaPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TVMediaPlayer.h; sourceTree = "<group>"; };
 		711F134F1C40F7ED0096DBAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		711F13551C40F9560096DBAD /* ControlsOverlay.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ControlsOverlay.storyboard; sourceTree = "<group>"; };
+		711F13561C40F9560096DBAD /* ControlsOverlayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControlsOverlayViewController.swift; sourceTree = "<group>"; };
+		711F13571C40F9560096DBAD /* MediaPlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaPlayerViewController.swift; sourceTree = "<group>"; };
+		711F13581C40F9560096DBAD /* MediaItemType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaItemType.swift; sourceTree = "<group>"; };
+		711F13591C40F9560096DBAD /* MediaPlayerType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaPlayerType.swift; sourceTree = "<group>"; };
+		711F135F1C40FB070096DBAD /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = System/Library/Frameworks/GameController.framework; sourceTree = SDKROOT; };
+		711F13651C41C2900096DBAD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		711F13671C41C64D0096DBAD /* DPadState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DPadState.swift; sourceTree = "<group>"; };
+		711F13681C41C64D0096DBAD /* PlayerState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerState.swift; sourceTree = "<group>"; };
+		711F13731C41E3BF0096DBAD /* TVMediaPlayerTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TVMediaPlayerTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		711F13751C41E3BF0096DBAD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		711F13771C41E3BF0096DBAD /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		711F137A1C41E3BF0096DBAD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		711F137C1C41E3BF0096DBAD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		711F137E1C41E3BF0096DBAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		711F13881C4208E00096DBAD /* TestMediaPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestMediaPlayer.swift; sourceTree = "<group>"; };
+		711F138A1C420EC60096DBAD /* TestPlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestPlayerViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -21,6 +79,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				711F13601C40FB070096DBAD /* GameController.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		711F13701C41E3BF0096DBAD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				711F13831C41E3D30096DBAD /* TVMediaPlayer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -30,7 +97,9 @@
 		711F13401C40F7ED0096DBAD = {
 			isa = PBXGroup;
 			children = (
+				711F135F1C40FB070096DBAD /* GameController.framework */,
 				711F134C1C40F7ED0096DBAD /* TVMediaPlayer */,
+				711F13741C41E3BF0096DBAD /* TVMediaPlayerTestApp */,
 				711F134B1C40F7ED0096DBAD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -39,6 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				711F134A1C40F7ED0096DBAD /* TVMediaPlayer.framework */,
+				711F13731C41E3BF0096DBAD /* TVMediaPlayerTestApp.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -46,10 +116,32 @@
 		711F134C1C40F7ED0096DBAD /* TVMediaPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				711F13671C41C64D0096DBAD /* DPadState.swift */,
+				711F13681C41C64D0096DBAD /* PlayerState.swift */,
+				711F13551C40F9560096DBAD /* ControlsOverlay.storyboard */,
+				711F13561C40F9560096DBAD /* ControlsOverlayViewController.swift */,
+				711F13571C40F9560096DBAD /* MediaPlayerViewController.swift */,
+				711F13581C40F9560096DBAD /* MediaItemType.swift */,
+				711F13591C40F9560096DBAD /* MediaPlayerType.swift */,
 				711F134D1C40F7ED0096DBAD /* TVMediaPlayer.h */,
 				711F134F1C40F7ED0096DBAD /* Info.plist */,
+				711F13651C41C2900096DBAD /* Images.xcassets */,
 			);
 			path = TVMediaPlayer;
+			sourceTree = "<group>";
+		};
+		711F13741C41E3BF0096DBAD /* TVMediaPlayerTestApp */ = {
+			isa = PBXGroup;
+			children = (
+				711F13751C41E3BF0096DBAD /* AppDelegate.swift */,
+				711F13771C41E3BF0096DBAD /* ViewController.swift */,
+				711F13791C41E3BF0096DBAD /* Main.storyboard */,
+				711F137C1C41E3BF0096DBAD /* Assets.xcassets */,
+				711F137E1C41E3BF0096DBAD /* Info.plist */,
+				711F13881C4208E00096DBAD /* TestMediaPlayer.swift */,
+				711F138A1C420EC60096DBAD /* TestPlayerViewController.swift */,
+			);
+			path = TVMediaPlayerTestApp;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -84,16 +176,39 @@
 			productReference = 711F134A1C40F7ED0096DBAD /* TVMediaPlayer.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		711F13721C41E3BF0096DBAD /* TVMediaPlayerTestApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 711F13811C41E3BF0096DBAD /* Build configuration list for PBXNativeTarget "TVMediaPlayerTestApp" */;
+			buildPhases = (
+				711F136F1C41E3BF0096DBAD /* Sources */,
+				711F13701C41E3BF0096DBAD /* Frameworks */,
+				711F13711C41E3BF0096DBAD /* Resources */,
+				711F13871C41E3D30096DBAD /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				711F13861C41E3D30096DBAD /* PBXTargetDependency */,
+			);
+			name = TVMediaPlayerTestApp;
+			productName = TVMediaPlayerTestApp;
+			productReference = 711F13731C41E3BF0096DBAD /* TVMediaPlayerTestApp.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		711F13411C40F7ED0096DBAD /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0720;
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = SwiftBit;
 				TargetAttributes = {
 					711F13491C40F7ED0096DBAD = {
+						CreatedOnToolsVersion = 7.2;
+					};
+					711F13721C41E3BF0096DBAD = {
 						CreatedOnToolsVersion = 7.2;
 					};
 				};
@@ -104,6 +219,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 711F13401C40F7ED0096DBAD;
 			productRefGroup = 711F134B1C40F7ED0096DBAD /* Products */;
@@ -111,6 +227,7 @@
 			projectRoot = "";
 			targets = (
 				711F13491C40F7ED0096DBAD /* TVMediaPlayer */,
+				711F13721C41E3BF0096DBAD /* TVMediaPlayerTestApp */,
 			);
 		};
 /* End PBXProject section */
@@ -120,6 +237,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				711F135A1C40F9560096DBAD /* ControlsOverlay.storyboard in Resources */,
+				711F13661C41C2900096DBAD /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		711F13711C41E3BF0096DBAD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				711F137D1C41E3BF0096DBAD /* Assets.xcassets in Resources */,
+				711F137B1C41E3BF0096DBAD /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,10 +258,46 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				711F135D1C40F9560096DBAD /* MediaItemType.swift in Sources */,
+				711F135C1C40F9560096DBAD /* MediaPlayerViewController.swift in Sources */,
+				711F135B1C40F9560096DBAD /* ControlsOverlayViewController.swift in Sources */,
+				711F135E1C40F9560096DBAD /* MediaPlayerType.swift in Sources */,
+				711F136A1C41C64D0096DBAD /* PlayerState.swift in Sources */,
+				711F13691C41C64D0096DBAD /* DPadState.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		711F136F1C41E3BF0096DBAD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				711F13891C4208E00096DBAD /* TestMediaPlayer.swift in Sources */,
+				711F138B1C420EC60096DBAD /* TestPlayerViewController.swift in Sources */,
+				711F13781C41E3BF0096DBAD /* ViewController.swift in Sources */,
+				711F13761C41E3BF0096DBAD /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		711F13861C41E3D30096DBAD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 711F13491C40F7ED0096DBAD /* TVMediaPlayer */;
+			targetProxy = 711F13851C41E3D30096DBAD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		711F13791C41E3BF0096DBAD /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				711F137A1C41E3BF0096DBAD /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		711F13501C40F7ED0096DBAD /* Debug */ = {
@@ -226,6 +390,7 @@
 		711F13531C40F7ED0096DBAD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -236,12 +401,15 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.swift-bit.TVMediaPlayer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Debug;
 		};
 		711F13541C40F7ED0096DBAD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -252,6 +420,33 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.swift-bit.TVMediaPlayer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+			};
+			name = Release;
+		};
+		711F137F1C41E3BF0096DBAD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				INFOPLIST_FILE = TVMediaPlayerTestApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.swift-bit.TVMediaPlayerTestApp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		711F13801C41E3BF0096DBAD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				INFOPLIST_FILE = TVMediaPlayerTestApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.swift-bit.TVMediaPlayerTestApp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -272,6 +467,15 @@
 			buildConfigurations = (
 				711F13531C40F7ED0096DBAD /* Debug */,
 				711F13541C40F7ED0096DBAD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		711F13811C41E3BF0096DBAD /* Build configuration list for PBXNativeTarget "TVMediaPlayerTestApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				711F137F1C41E3BF0096DBAD /* Debug */,
+				711F13801C41E3BF0096DBAD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};
