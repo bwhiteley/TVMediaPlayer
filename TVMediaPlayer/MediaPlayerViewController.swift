@@ -37,7 +37,14 @@ public class MediaPlayerViewController: UIViewController {
     
     public var mediaPlayer:MediaPlayerType
     
-    public weak var thumbnailDelegate:MediaPlayerThumbnailSnapshotDelegate?
+    public var thumbnailDelegate:MediaPlayerThumbnailSnapshotDelegate? {
+        get {
+            return controls.delegate
+        }
+        set {
+            controls.delegate = newValue
+        }
+    }
     
 //    lazy var swipeUpGestureRecognizer:UISwipeGestureRecognizer = {
 //        let gr = UISwipeGestureRecognizer(target: self, action: "swipedUp:")
@@ -403,11 +410,5 @@ extension MediaPlayerViewController {
 //        }
 //    }
 
-}
-
-extension MediaPlayerViewController: MediaPlayerThumbnailSnapshotDelegate {
-    public func snapshotImageAtPosition(position: Float, size: CGSize, handler: MediaPlayerThumbnailHandler) {
-        thumbnailDelegate?.snapshotImageAtPosition(position, size: size, handler: handler)
-    }
 }
 
