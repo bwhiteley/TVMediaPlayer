@@ -64,7 +64,7 @@ public class ControlsOverlayViewController: UIViewController {
     private var touching:Bool = false // This is used because `touchesEnded` is called before the last DPad state change.
     
     func setSnapshotViewsHidden(hidden:Bool, animated:Bool = false, completion:(() -> Void)? = nil) {
-        if animated && thumbnailContainer.hidden != hidden {
+        if animated && thumbnailContainer.hidden != hidden && delegate != nil {
             let origHeightConstant = self.snapshotImageHeightConstraint.constant
             if hidden {
                 self.controlsOverlayView?.layoutIfNeeded()
@@ -94,8 +94,9 @@ public class ControlsOverlayViewController: UIViewController {
             }
         }
         else {
-            self.thumbnailContainer.hidden = hidden
-            self.lineView.hidden = hidden
+            let hideViews = hidden || delegate == nil
+            self.thumbnailContainer.hidden = hideViews
+            self.lineView.hidden = hideViews
             completion?()
         }
     }
