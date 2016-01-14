@@ -46,6 +46,8 @@ public class MediaPlayerViewController: UIViewController {
         }
     }
     
+    public var dismiss:((position:Float) -> Void)?
+    
 //    lazy var swipeUpGestureRecognizer:UISwipeGestureRecognizer = {
 //        let gr = UISwipeGestureRecognizer(target: self, action: "swipedUp:")
 //        gr.direction = .Up
@@ -195,9 +197,14 @@ public class MediaPlayerViewController: UIViewController {
 
     }
     
-    public func menuPressed(gr:UITapGestureRecognizer) {
-        self.mediaPlayer.pause()
-        self.dismissViewControllerAnimated(true, completion: nil)
+    internal func menuPressed(gr:UITapGestureRecognizer) {
+        mediaPlayer.pause()
+        if let dismiss = dismiss {
+            dismiss(position: mediaPlayer.position)
+        }
+        else {
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }
     }
     
     private var initialPanningPosition:Float = 0
