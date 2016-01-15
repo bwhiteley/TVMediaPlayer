@@ -27,13 +27,13 @@ public class MediaPlayerViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    let mediaItem: MediaItemType
+    public let mediaItem: MediaItemType
 
     public var canvasView:UIView = UIView()
     
-    public let controls:ControlsOverlayViewController
+    private let controls:ControlsOverlayViewController
 
-    let panAdjustmentValue:Float = 0.3
+    private let panAdjustmentValue:Float = 0.3
     
     public var mediaPlayer:MediaPlayerType
     
@@ -58,17 +58,17 @@ public class MediaPlayerViewController: UIViewController {
 //        gr.direction = .Down
 //        return gr
 //    }()
-    lazy var swipeLeftGestureRecognizer:UISwipeGestureRecognizer = {
+    private lazy var swipeLeftGestureRecognizer:UISwipeGestureRecognizer = {
         let gr = UISwipeGestureRecognizer(target: self, action: "swipedLeft:")
         gr.direction = .Left
         return gr
     }()
-    lazy var swipeRightGestureRecognizer:UISwipeGestureRecognizer = {
+    private lazy var swipeRightGestureRecognizer:UISwipeGestureRecognizer = {
         let gr = UISwipeGestureRecognizer(target: self, action: "swipedRight:")
         gr.direction = .Right
         return gr
     }()
-    lazy var panGestureRecognizer:UIPanGestureRecognizer = {
+    private lazy var panGestureRecognizer:UIPanGestureRecognizer = {
         let pan = UIPanGestureRecognizer(target: self, action: "panning:")
         pan.enabled = false
         return pan
@@ -136,7 +136,7 @@ public class MediaPlayerViewController: UIViewController {
         return .Select
     }
     
-    func dpadChanged(x x:Float, y:Float) {
+    private func dpadChanged(x x:Float, y:Float) {
 //        NSLog("dpad: x: \(x) y: \(y)")
         self.dpadState = dpadStateForAxis(x: x, y: y)
     }
@@ -284,25 +284,25 @@ public class MediaPlayerViewController: UIViewController {
         return interval < 0.1
     }
     
-    func upArrowPressed() {
+    private func upArrowPressed() {
         guard !didTapEventComeFromDPad() else { return }
         guard case .StandardPlay = playerState else { return }
         longJumpAhead()
     }
     
-    func downArrowPressed() {
+    private func downArrowPressed() {
         guard !didTapEventComeFromDPad() else { return }
         guard case .StandardPlay = playerState else { return }
         longJumpBack()
     }
 
-    func leftArrowPressed() {
+    private func leftArrowPressed() {
         guard !didTapEventComeFromDPad() else { return }
         guard case .StandardPlay = playerState else { return }
         shortJumpBack()
     }
     
-    func rightArrowPressed() {
+    private func rightArrowPressed() {
         guard !didTapEventComeFromDPad() else { return }
         guard case .StandardPlay = playerState else { return }
         shortJumpAhead()
@@ -316,7 +316,7 @@ public class MediaPlayerViewController: UIViewController {
         return newPosition
     }
 
-    internal func selectPressed() {
+    private func selectPressed() {
         let state = playerState
         switch state {
         case .StandardPlay, .Rewind, .Fastforward:
@@ -345,7 +345,7 @@ public class MediaPlayerViewController: UIViewController {
     }
 
     
-    func playPressed() {
+    private func playPressed() {
         let state = playerState
         switch state {
         case .Pause:
@@ -355,7 +355,7 @@ public class MediaPlayerViewController: UIViewController {
         }
     }
     
-    func flashTimeBar() {
+    private func flashTimeBar() {
         controls.position = mediaPlayer.position
         controls.flashTimeBar()
     }
