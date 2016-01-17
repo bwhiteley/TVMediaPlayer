@@ -9,7 +9,7 @@
 import UIKit
 
 public protocol MediaPlayerThumbnailHandler: NSObjectProtocol {
-    func snapshotImage(image:UIImage, forPosition position:Float)
+    func setSnapshotImage(image:UIImage, forPosition position:Float)
 }
 
 public protocol MediaPlayerThumbnailSnapshotDelegate: NSObjectProtocol {
@@ -357,12 +357,12 @@ public class ControlsOverlayViewController: UIViewController {
 }
 
 extension ControlsOverlayViewController: MediaPlayerThumbnailHandler {
-    public func snapshotImage(image:UIImage, forPosition position:Float) {
+    public func setSnapshotImage(image:UIImage, forPosition position:Float) {
         self.snapshotImageView?.image = image
     }
 }
 
-func delay(delay:Double, closure:()->()) {
+private func delay(delay:Double, closure:()->()) {
     dispatch_after(
         dispatch_time(
             DISPATCH_TIME_NOW,

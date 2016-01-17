@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVKit
 
 class ViewController: UIViewController {
 
@@ -25,5 +26,13 @@ class ViewController: UIViewController {
         self.presentViewController(vc, animated: true, completion: nil)
     }
 
+    @IBAction func controlClicked(sender: AnyObject) {
+        let url = NSURL(string: "https://bennugd-vlc.googlecode.com/files/sintel_trailer-480p.mp4")!
+        let vc = AVPlayerViewController()
+        vc.player = AVPlayer(URL: url)
+        self.presentViewController(vc, animated: true, completion: nil)
+        vc.player?.play()
+    }
+    
 }
 
