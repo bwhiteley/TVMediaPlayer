@@ -44,18 +44,25 @@ public class ControlsOverlayViewController: UIViewController {
     @IBOutlet var subtitleLabel: UILabel!
     @IBOutlet var sizeLabel: UILabel?
 
-    @IBOutlet var progressView: UIProgressView!
+    @IBOutlet var progressView: UIVisualEffectView! {
+        didSet {
+            progressView.layer.masksToBounds = true
+            progressView.layer.cornerRadius = progressView.frame.height / 2
+        }
+    }
     @IBOutlet var timeElapsedLabel: UILabel!
     @IBOutlet var timeRemainingLabel: UILabel!
     @IBOutlet var snapshotImageView: UIImageView?
     @IBOutlet var thumbnailStackXConstraint: NSLayoutConstraint!
-    @IBOutlet var lineView: UIVisualEffectView!
+    @IBOutlet var lineView: UIView!
     @IBOutlet var thumbnailContainer: UIVisualEffectView!
     @IBOutlet var fastForwardAndRewindLabel: UILabel!
     @IBOutlet var skipForwardIcon: UIView!
     @IBOutlet var skipBackIcon: UIView!
     
     @IBOutlet var snapshotImageHeightConstraint: NSLayoutConstraint!
+    @IBOutlet var progressLineHeightConstraint: NSLayoutConstraint!
+    @IBOutlet var progressLineBottomConstraint: NSLayoutConstraint!
     
     private var temporaryDisplayToken:NSDate?
     
@@ -69,12 +76,13 @@ public class ControlsOverlayViewController: UIViewController {
             if hidden {
                 self.controlsOverlayView?.layoutIfNeeded()
                 UIView.animateWithDuration(0.3, delay: 0, options: .CurveEaseInOut, animations: {
+                    defer { self.controlsOverlayView?.layoutIfNeeded() }
                     self.snapshotImageHeightConstraint.constant = 1
-                    self.controlsOverlayView?.layoutIfNeeded()
+                    self.progressLineBottomConstraint.constant = -6
+                    self.progressLineHeightConstraint.constant = 22
                     }, completion: { success in
                         guard success else { return }
                         self.thumbnailContainer.hidden = true
-                        self.lineView.hidden = true
                         self.snapshotImageHeightConstraint.constant = origHeightConstant
                         completion?()
                 })
@@ -83,10 +91,11 @@ public class ControlsOverlayViewController: UIViewController {
                 self.snapshotImageHeightConstraint.constant = 1
                 self.controlsOverlayView?.layoutIfNeeded()
                 self.thumbnailContainer.hidden = false
-                self.lineView.hidden = false
                 UIView.animateWithDuration(0.3, delay: 0, options: .CurveEaseInOut, animations: {
+                    defer { self.controlsOverlayView?.layoutIfNeeded() }
                     self.snapshotImageHeightConstraint.constant = origHeightConstant
-                    self.controlsOverlayView?.layoutIfNeeded()
+                    self.progressLineBottomConstraint.constant = 0
+                    self.progressLineHeightConstraint.constant = 32
                     }, completion: { success in
                         guard success else { return }
                         completion?()
@@ -96,7 +105,8 @@ public class ControlsOverlayViewController: UIViewController {
         else {
             let hideViews = hidden || delegate == nil
             self.thumbnailContainer.hidden = hideViews
-            self.lineView.hidden = hideViews
+            self.progressLineBottomConstraint.constant = hideViews ? -6 : 0
+            self.progressLineHeightConstraint.constant = hideViews ? 22 : 32
             completion?()
         }
     }
@@ -274,14 +284,11 @@ public class ControlsOverlayViewController: UIViewController {
         }
     }
     
-    public var position:Float {
-        get {
-            return self.progressView.progress
-        }
-        set {
-            var val = min(Float(1.0), newValue)
+    public var position:Float = 0 {
+        didSet {
+            var val = min(Float(1.0), position)
             val = max(Float(0), val)
-            self.progressView.progress = val
+            self.position = val
             guard let rvm = mediaItem else { return }
             let (elapsed, remaining) = rvm.timeStringsAtPosition(val)
             timeElapsedLabel.text = elapsed
@@ -295,7 +302,7 @@ public class ControlsOverlayViewController: UIViewController {
             guard let snapShotSize = snapshotImageView?.frame.size else { return }
             
             if case .Pause = playerState {
-                delegate?.snapshotImageAtPosition(newValue, size:snapShotSize, handler: self)
+                delegate?.snapshotImageAtPosition(position, size:snapShotSize, handler: self)
             }
         }
     }
@@ -339,7 +346,7 @@ public class ControlsOverlayViewController: UIViewController {
         
         headerAndFooterElements = [titleLabel, subtitleLabel, sizeLabel,
             progressView, timeRemainingLabel, timeElapsedLabel,
-            headerView, footerView
+            headerView, footerView, lineView
         ]
     }
     
