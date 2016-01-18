@@ -1,8 +1,5 @@
 //
-//  TVMediaPlayer.h
-//  TVMediaPlayer
-//
-//  Created by J. B. Whiteley on 1/9/16.
+//  Created by Bart Whiteley on 1/9/16.
 //  Copyright © 2016 SwiftBit. All rights reserved.
 //
 

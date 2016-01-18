@@ -1,11 +1,3 @@
-//
-//  PlayerState.swift
-//  MythTV
-//
-//  Created by Bart Whiteley on 10/25/15.
-//  Copyright © 2015 SwiftBit. All rights reserved.
-//
-
 import Foundation
 
 enum PlayerState {
@@ -67,3 +59,8 @@ enum PlayerState {
     private static let rewindRates:[Float] = [] // Doesn't seem to work in VLC. [2, 4, 8, 16]
     private static let fastforwardRates:[Float] = [1.3, 2, 4, 6]
 }
+
+//
+//  Created by Bart Whiteley on 10/25/15.
+//  Copyright © 2015 SwiftBit. All rights reserved.
+//

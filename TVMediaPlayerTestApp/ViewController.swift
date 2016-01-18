@@ -1,11 +1,3 @@
-//
-//  ViewController.swift
-//  TVMediaPlayerTestApp
-//
-//  Created by J. B. Whiteley on 1/9/16.
-//  Copyright © 2016 SwiftBit. All rights reserved.
-//
-
 import UIKit
 import AVKit
 
@@ -36,3 +28,7 @@ class ViewController: UIViewController {
     
 }
 
+//
+//  Created by Bart Whiteley on 1/9/16.
+//  Copyright © 2016 SwiftBit. All rights reserved.
+//

@@ -1,11 +1,3 @@
-//
-//  AppDelegate.swift
-//  TVMediaPlayerTestApp
-//
-//  Created by J. B. Whiteley on 1/9/16.
-//  Copyright © 2016 SwiftBit. All rights reserved.
-//
-
 import UIKit
 
 @UIApplicationMain
@@ -44,3 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
+//
+//  Created by Bart Whiteley on 1/9/16.
+//  Copyright © 2016 SwiftBit. All rights reserved.
+//

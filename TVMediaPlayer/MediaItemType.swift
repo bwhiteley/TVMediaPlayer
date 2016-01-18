@@ -1,11 +1,3 @@
-//
-//  MediaItemType.swift
-//  MythTV
-//
-//  Created by J. B. Whiteley on 1/8/16.
-//  Copyright © 2016 SwiftBit. All rights reserved.
-//
-
 import Foundation
 
 public protocol MediaItemType {
@@ -50,3 +42,8 @@ extension MediaItemType {
     }
 
 }
+
+//
+//  Created by Bart Whiteley on 1/8/16.
+//  Copyright © 2016 SwiftBit. All rights reserved.
+//

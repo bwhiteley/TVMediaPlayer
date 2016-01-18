@@ -1,11 +1,3 @@
-//
-//  DPadState.swift
-//  MythTV
-//
-//  Created by J. B. Whiteley on 11/10/15.
-//  Copyright © 2015 SwiftBit. All rights reserved.
-//
-
 import Foundation
 
 enum DPadState: CustomStringConvertible {
@@ -26,3 +18,7 @@ enum DPadState: CustomStringConvertible {
     }
 }
 
+//
+//  Created by Bart Whiteley on 11/10/15.
+//  Copyright © 2015 SwiftBit. All rights reserved.
+//

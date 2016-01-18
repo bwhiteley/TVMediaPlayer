@@ -1,11 +1,3 @@
-//
-//  ControlsOverlayViewController.swift
-//  MythTV
-//
-//  Created by J. B. Whiteley on 10/6/15.
-//  Copyright © 2015 SwiftBit. All rights reserved.
-//
-
 import UIKit
 
 public protocol MediaPlayerThumbnailHandler: NSObjectProtocol {
@@ -365,4 +357,7 @@ private func delay(delay:Double, closure:()->()) {
         dispatch_get_main_queue(), closure)
 }
 
-
+//
+//  Created by Bart Whiteley on 10/6/15.
+//  Copyright © 2015 SwiftBit. All rights reserved.
+//

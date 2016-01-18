@@ -1,11 +1,3 @@
-//
-//  MediaPlayerViewController.swift
-//  MythTV
-//
-//  Created by J. B. Whiteley on 10/4/15.
-//  Copyright © 2015 SwiftBit. All rights reserved.
-//
-
 import UIKit
 import GameController
 
@@ -379,3 +371,7 @@ extension MediaPlayerViewController {
     }
 }
 
+//
+//  Created by Bart Whiteley on 10/4/15.
+//  Copyright © 2015 SwiftBit. All rights reserved.
+//
