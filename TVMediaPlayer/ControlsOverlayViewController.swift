@@ -42,7 +42,6 @@ public class ControlsOverlayViewController: UIViewController {
     @IBOutlet var footerView: UIView!
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var subtitleLabel: UILabel!
-    @IBOutlet var sizeLabel: UILabel?
 
     @IBOutlet var progressView: UIVisualEffectView! {
         didSet {
@@ -116,12 +115,10 @@ public class ControlsOverlayViewController: UIViewController {
             if hidden {
                 UIView.animateWithDuration(0.3, animations: {
                     self.headerAndFooterElements.forEach { $0?.alpha = 0 }
-                }, completion: { success in
-                    //guard success else { return }
+                }, completion: { _ in
                     self.headerAndFooterElements.forEach {
                         $0?.alpha = 0
                         $0?.hidden = true
-                        //guard success else { return }
                         completion?()
                     }
                 })
@@ -133,8 +130,7 @@ public class ControlsOverlayViewController: UIViewController {
                 }
                 UIView.animateWithDuration(0.3, animations: {
                     self.headerAndFooterElements.forEach { $0?.alpha = 1 }
-                }, completion: { success in
-                    //guard success else { return }
+                }, completion: { _ in
                     completion?()
                 })
             }
@@ -191,16 +187,6 @@ public class ControlsOverlayViewController: UIViewController {
                 skipBackIcon.hidden = true
                 skipForwardIcon.hidden = true
             }
-        }
-    }
-    
-    public var videoSize:CGSize? = nil {
-        didSet {
-            guard let size = videoSize where size.height > 0 else {
-                sizeLabel?.text = nil
-                return
-            }
-            self.sizeLabel?.text = "\(Int(size.width))x\(Int(size.height))"
         }
     }
     
@@ -327,7 +313,6 @@ public class ControlsOverlayViewController: UIViewController {
     
     override public func viewDidLoad() {
         super.viewDidLoad()
-        self.videoSize = nil
         
         self.titleLabel.text = mediaItem?.title
         self.subtitleLabel.text = mediaItem?.subtitle
@@ -344,7 +329,9 @@ public class ControlsOverlayViewController: UIViewController {
         gradient.colors = [UIColor.clearColor().CGColor, UIColor.blackColor().CGColor]
         footerView.layer.insertSublayer(gradient, atIndex: 0)
         
-        headerAndFooterElements = [titleLabel, subtitleLabel, sizeLabel,
+        // These aren't subviews of the footer, so we have to adjust them individually. 
+        // We should probably fix that sometime.
+        headerAndFooterElements = [titleLabel, subtitleLabel,
             progressView, timeRemainingLabel, timeElapsedLabel,
             headerView, footerView, lineView
         ]

@@ -117,8 +117,8 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <view opaque="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X33-ZR-OWO" userLabel="Visual Effect View - Line">
-                                        <rect key="frame" x="1230" y="953" width="2" height="39"/>
+                                    <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X33-ZR-OWO" userLabel="Visual Effect View - Line">
+                                        <rect key="frame" x="1230" y="953" width="2" height="40"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="0Ml-dZ-iTO"/>
@@ -173,19 +173,11 @@
                                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1920x1080" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b1T-jg-Ec9">
-                                                <rect key="frame" x="1739" y="60" width="91" height="22"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="b1T-jg-Ec9" secondAttribute="trailing" constant="90" id="Cx4-DC-9fc"/>
                                             <constraint firstItem="lWo-x5-wew" firstAttribute="leading" secondItem="xkB-bn-mJ8" secondAttribute="leading" id="DGd-kB-7es"/>
                                             <constraint firstItem="xkB-bn-mJ8" firstAttribute="top" secondItem="nXV-RU-UW1" secondAttribute="top" constant="60" id="HPC-w6-sFc"/>
-                                            <constraint firstItem="b1T-jg-Ec9" firstAttribute="top" secondItem="nXV-RU-UW1" secondAttribute="top" constant="60" id="iah-hj-hKv"/>
                                             <constraint firstItem="lWo-x5-wew" firstAttribute="top" secondItem="xkB-bn-mJ8" secondAttribute="bottom" constant="8" id="sOj-Pt-cBk"/>
                                             <constraint firstItem="xkB-bn-mJ8" firstAttribute="leading" secondItem="nXV-RU-UW1" secondAttribute="leading" constant="90" id="ufF-OW-8an"/>
                                             <constraint firstAttribute="height" constant="200" id="zzr-62-ge9"/>
@@ -240,7 +232,6 @@
                         <outlet property="progressLineBottomConstraint" destination="xYO-Vw-e5l" id="cKP-P8-CV4"/>
                         <outlet property="progressLineHeightConstraint" destination="0Ml-dZ-iTO" id="3zl-yy-DU6"/>
                         <outlet property="progressView" destination="0Hi-Sq-ngu" id="7hy-sY-3ao"/>
-                        <outlet property="sizeLabel" destination="b1T-jg-Ec9" id="hNd-EO-LQv"/>
                         <outlet property="skipBackIcon" destination="gOK-g5-OR2" id="Bmd-tD-8Cb"/>
                         <outlet property="skipForwardIcon" destination="ATe-Va-qTi" id="DHc-jm-KHs"/>
                         <outlet property="snapshotImageHeightConstraint" destination="xhO-vd-qVo" id="86y-2e-LwE"/>

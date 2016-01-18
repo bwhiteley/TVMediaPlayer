@@ -48,16 +48,6 @@ public class MediaPlayerViewController: UIViewController {
     
     public var dismiss:((position:Float) -> Void)?
     
-//    lazy var swipeUpGestureRecognizer:UISwipeGestureRecognizer = {
-//        let gr = UISwipeGestureRecognizer(target: self, action: "swipedUp:")
-//        gr.direction = .Up
-//        return gr
-//    }()
-//    lazy var swipeDownGestureRecognizer:UISwipeGestureRecognizer = {
-//        let gr = UISwipeGestureRecognizer(target: self, action: "swipedDown:")
-//        gr.direction = .Down
-//        return gr
-//    }()
     private lazy var swipeLeftGestureRecognizer:UISwipeGestureRecognizer = {
         let gr = UISwipeGestureRecognizer(target: self, action: "swipedLeft:")
         gr.direction = .Left
@@ -77,7 +67,6 @@ public class MediaPlayerViewController: UIViewController {
     private var dpadState:DPadState = .Select {
         didSet {
             guard oldValue != dpadState else { return }
-            //NSLog("New DPad state: \(dpadState)")
             controls.dpadState = dpadState
         }
     }
@@ -85,7 +74,6 @@ public class MediaPlayerViewController: UIViewController {
     private var playerState:PlayerState = .StandardPlay {
         didSet {
             controls.playerState = playerState
-            // controls?.videoSize = mediaPlayer.videoSize TODO
             switch playerState {
             case .StandardPlay:
                 play()
@@ -111,8 +99,6 @@ public class MediaPlayerViewController: UIViewController {
         panGestureRecognizer.enabled = false
         swipeRightGestureRecognizer.enabled = true
         swipeLeftGestureRecognizer.enabled = true
-        //                swipeUpGestureRecognizer.enabled = true
-        //                swipeDownGestureRecognizer.enabled = true
         mediaPlayer.play()
         mediaPlayer.rate = 1
     }
@@ -121,8 +107,6 @@ public class MediaPlayerViewController: UIViewController {
         panGestureRecognizer.enabled = true
         swipeRightGestureRecognizer.enabled = false
         swipeLeftGestureRecognizer.enabled = false
-        //                swipeUpGestureRecognizer.enabled = false
-        //                swipeDownGestureRecognizer.enabled = false
         controls.position = mediaPlayer.position
         mediaPlayer.pause()
     }
@@ -131,13 +115,10 @@ public class MediaPlayerViewController: UIViewController {
         let threshold:Float = 0.7
         if x > threshold { return .Right }
         if x < -threshold { return .Left }
-//        if y > threshold { return .Up }
-//        if y < -threshold { return .Down }
         return .Select
     }
     
     private func dpadChanged(x x:Float, y:Float) {
-//        NSLog("dpad: x: \(x) y: \(y)")
         self.dpadState = dpadStateForAxis(x: x, y: y)
     }
 
@@ -148,8 +129,6 @@ public class MediaPlayerViewController: UIViewController {
         view.addSubview(canvasView)
         
         
-//        controlsOverlayView.hidden = true
-        //mediaPlayer.pause()
         mediaPlayer.play()
         setupButtons()
         
@@ -159,9 +138,6 @@ public class MediaPlayerViewController: UIViewController {
         micro.dpad.valueChangedHandler = { [weak self] (pad, x, y) in
             self?.dpadChanged(x:x, y: y)
         }
-        
-//        VLCLibrary.sharedLibrary().debugLogging = true
-//        VLCLibrary.sharedLibrary().debugLoggingLevel = 0
         
         controls.view.frame = self.view.bounds
         controls.view.autoresizingMask = [.FlexibleHeight, .FlexibleWidth]
@@ -173,22 +149,14 @@ public class MediaPlayerViewController: UIViewController {
     
     private func setupButtons() {
         
-//        self.view.addGestureRecognizer(swipeUpGestureRecognizer)
-//        self.view.addGestureRecognizer(swipeDownGestureRecognizer)
         self.view.addGestureRecognizer(swipeRightGestureRecognizer)
         self.view.addGestureRecognizer(swipeLeftGestureRecognizer)
         
         
     
-//        panGestureRecognizer.requireGestureRecognizerToFail(swipeUpGestureRecognizer)
-//        panGestureRecognizer.requireGestureRecognizerToFail(swipeDownGestureRecognizer)
         panGestureRecognizer.requireGestureRecognizerToFail(swipeLeftGestureRecognizer)
         panGestureRecognizer.requireGestureRecognizerToFail(swipeRightGestureRecognizer)
         
-//        pan.requireGestureRecognizerToFail(upArrowGestureRecognizer)
-//        pan.requireGestureRecognizerToFail(downArrowGestureRecognizer)
-//        pan.requireGestureRecognizerToFail(leftArrowGestureRecognizer)
-//        pan.requireGestureRecognizerToFail(rightArrowGestureRecognizer)
         self.view.addGestureRecognizer(panGestureRecognizer)
 
         let tap = UITapGestureRecognizer(target: self, action: "menuPressed:")
@@ -339,7 +307,6 @@ public class MediaPlayerViewController: UIViewController {
             }
         case .Pause:
             mediaPlayer.position = controls.position
-//            self.initialPosition = controls.position
             playerState = .StandardPlay
         }
     }
@@ -410,12 +377,5 @@ extension MediaPlayerViewController {
         super.touchesCancelled(touches, withEvent: event)
         controls.touchesEnded()
     }
-
-//    override func pressesEnded(presses: Set<UIPress>, withEvent event: UIPressesEvent?) {
-//        for item in presses {
-//            NSLog("presses ended for type: %d", item.type.rawValue)
-//        }
-//    }
-
 }
 
