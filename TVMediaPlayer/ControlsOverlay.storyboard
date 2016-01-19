@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder.AppleTV.Storyboard" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="AppleTV" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder.AppleTV.Storyboard" version="3.0" toolsVersion="10089" systemVersion="15C50" targetRuntime="AppleTV" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10072.1"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
@@ -242,6 +242,11 @@
                         <outlet property="timeElapsedLabel" destination="Vnd-8y-0Ro" id="lLb-lV-ciz"/>
                         <outlet property="timeRemainingLabel" destination="OSp-Nz-u0x" id="Pgk-in-tHZ"/>
                         <outlet property="titleLabel" destination="xkB-bn-mJ8" id="2a4-Oa-gaC"/>
+                        <outletCollection property="horizontalMarginConstraints" destination="ufF-OW-8an" collectionClass="NSMutableArray" id="Cuo-eD-rA6"/>
+                        <outletCollection property="verticalMarginConstraints" destination="HPC-w6-sFc" collectionClass="NSMutableArray" id="pfP-Fq-oNu"/>
+                        <outletCollection property="horizontalMarginConstraints" destination="Lqn-IQ-xyG" collectionClass="NSMutableArray" id="JB9-5Y-0bd"/>
+                        <outletCollection property="verticalMarginConstraints" destination="DzC-bZ-B9E" collectionClass="NSMutableArray" id="TnY-ss-Rxg"/>
+                        <outletCollection property="horizontalMarginConstraints" destination="HAH-QS-eWs" collectionClass="NSMutableArray" id="dYk-sm-aRb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bwS-y9-gu5" userLabel="First Responder" sceneMemberID="firstResponder"/>

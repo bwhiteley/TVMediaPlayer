@@ -29,6 +29,8 @@ public class MediaPlayerViewController: UIViewController {
     
     public var mediaPlayer:MediaPlayerType
     
+    public var wideMargins:Bool = true
+    
     public var thumbnailDelegate:MediaPlayerThumbnailSnapshotDelegate? {
         get {
             return controls.delegate
@@ -131,6 +133,7 @@ public class MediaPlayerViewController: UIViewController {
             self?.dpadChanged(x:x, y: y)
         }
         
+        controls.wideMargins = self.wideMargins
         controls.view.frame = self.view.bounds
         controls.view.autoresizingMask = [.FlexibleHeight, .FlexibleWidth]
         controls.willMoveToParentViewController(self)

@@ -28,6 +28,8 @@ public class ControlsOverlayViewController: UIViewController {
     
     public weak var delegate: MediaPlayerThumbnailSnapshotDelegate?
     
+    internal var wideMargins = true
+    
     private var mediaItem:MediaItemType?
     
     @IBOutlet var headerView: UIView!
@@ -54,6 +56,10 @@ public class ControlsOverlayViewController: UIViewController {
     @IBOutlet var snapshotImageHeightConstraint: NSLayoutConstraint!
     @IBOutlet var progressLineHeightConstraint: NSLayoutConstraint!
     @IBOutlet var progressLineBottomConstraint: NSLayoutConstraint!
+    
+    @IBOutlet var horizontalMarginConstraints: [NSLayoutConstraint]!
+    @IBOutlet var verticalMarginConstraints: [NSLayoutConstraint]!
+    
     
     private var temporaryDisplayToken:NSDate?
     
@@ -327,6 +333,15 @@ public class ControlsOverlayViewController: UIViewController {
             progressView, timeRemainingLabel, timeElapsedLabel,
             headerView, footerView, lineView
         ]
+        
+        if !wideMargins {
+            horizontalMarginConstraints.forEach {
+                $0.constant = 45
+            }
+            verticalMarginConstraints.forEach {
+                $0.constant = 30
+            }
+        }
     }
     
     func flashTimeBar() {
