@@ -1,14 +1,20 @@
 import UIKit
 import GameController
 
+public protocol MediaPlayerThumbnailHandler: NSObjectProtocol {
+    func setSnapshotImage(image:UIImage, forPosition position:Float)
+}
+
+public protocol MediaPlayerThumbnailSnapshotDelegate: NSObjectProtocol {
+    func snapshotImageAtPosition(position:Float, size:CGSize, handler:MediaPlayerThumbnailHandler)
+}
 
 public class MediaPlayerViewController: UIViewController {
     
     
-    public init(mediaPlayer:MediaPlayerType, mediaItem:MediaItemType) {
+    public init(mediaPlayer:MediaPlayerType) {
         self.mediaPlayer = mediaPlayer
-        self.mediaItem = mediaItem
-        self.controls = ControlsOverlayViewController.viewControllerFromStoryboard(mediaItem: mediaItem)
+        self.controls = ControlsOverlayViewController.viewControllerFromStoryboard(mediaItem: mediaPlayer.item)
         super.init(nibName: nil, bundle: nil)
         self.mediaPlayer.positionChanged = { [weak self] newPosition in
             self?.mediaPlayerPositionChanged(newPosition)
@@ -18,8 +24,6 @@ public class MediaPlayerViewController: UIViewController {
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    public let mediaItem: MediaItemType
 
     public var canvasView:UIView = UIView()
     
@@ -215,25 +219,25 @@ public class MediaPlayerViewController: UIViewController {
     }
     
     func shortJumpAhead() {
-        let position = adjustPosition(mediaPlayer.position, bySeconds: 30)
+        let position = MediaPlayerViewController.newPositionByAdjustingPosition(mediaPlayer.position, bySeconds: 30, length: mediaPlayer.item.length)
         self.mediaPlayer.position = position
         flashTimeBar()
     }
     
     func shortJumpBack() {
-        let position = adjustPosition(mediaPlayer.position, bySeconds: -10)
+        let position = MediaPlayerViewController.newPositionByAdjustingPosition(mediaPlayer.position, bySeconds: -10, length: mediaPlayer.item.length)
         self.mediaPlayer.position = position
         flashTimeBar()
     }
     
     func longJumpAhead() {
-        let position = adjustPosition(mediaPlayer.position, bySeconds: 60*10)
+        let position = MediaPlayerViewController.newPositionByAdjustingPosition(mediaPlayer.position, bySeconds: 60*10, length: mediaPlayer.item.length)
         self.mediaPlayer.position = position
         flashTimeBar()
     }
     
     func longJumpBack() {
-        let position = adjustPosition(mediaPlayer.position, bySeconds: -60*10)
+        let position = MediaPlayerViewController.newPositionByAdjustingPosition(mediaPlayer.position, bySeconds: -60*10, length: mediaPlayer.item.length)
         self.mediaPlayer.position = position
         flashTimeBar()
     }
@@ -270,9 +274,9 @@ public class MediaPlayerViewController: UIViewController {
         guard case .StandardPlay = playerState else { return }
         shortJumpAhead()
     }
-
-    public func adjustPosition(position:Float, bySeconds seconds:Float) -> Float {
-        let delta = seconds / Float(mediaItem.length)
+    
+    public static func newPositionByAdjustingPosition(position:Float, bySeconds seconds:Float, length:NSTimeInterval) -> Float {
+        let delta = seconds / Float(length)
         var newPosition = position + delta
         newPosition = max(newPosition, 0.0)
         newPosition = min(newPosition, 1.0)

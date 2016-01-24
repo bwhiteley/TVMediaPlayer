@@ -6,7 +6,7 @@ class TestPlayerViewController:MediaPlayerViewController {
     let testMediaPlayer = TestMediaPlayer()
     
     init() {
-        super.init(mediaPlayer: testMediaPlayer, mediaItem: testMediaPlayer)
+        super.init(mediaPlayer: testMediaPlayer)
     }
 
     required init?(coder aDecoder: NSCoder) {

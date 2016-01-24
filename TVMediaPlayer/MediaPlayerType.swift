@@ -1,9 +1,10 @@
-import Foundation
 
 public protocol MediaPlayerType {
     
     func pause()
     func play()
+    
+    var item:MediaItemType { get }
     
     var rate:Float { get set }
     var position:Float { get set }

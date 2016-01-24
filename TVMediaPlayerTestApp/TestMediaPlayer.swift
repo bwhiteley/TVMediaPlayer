@@ -11,13 +11,15 @@ class TestMediaPlayer: MediaPlayerType, MediaItemType {
     
     lazy var player:AVPlayer = {
         let player = AVPlayer(playerItem: self.playerItem)
-        player.addPeriodicTimeObserverForInterval(CMTime(value: 100, timescale: 1000), queue: nil) { [weak self] time in
+        player.addPeriodicTimeObserverForInterval(CMTime(value: 10, timescale: 1000), queue: nil) { [weak self] time in
             guard let sself = self else { return }
             let position = time.seconds / sself.length
             sself.positionChanged?(position: Float(position))
         }
         return player
     }()
+    
+    var item:MediaItemType { return self }
     
     var positionChanged:((position:Float) -> Void)?
     

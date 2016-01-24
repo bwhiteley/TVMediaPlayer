@@ -1,14 +1,6 @@
 import UIKit
 
-public protocol MediaPlayerThumbnailHandler: NSObjectProtocol {
-    func setSnapshotImage(image:UIImage, forPosition position:Float)
-}
-
-public protocol MediaPlayerThumbnailSnapshotDelegate: NSObjectProtocol {
-    func snapshotImageAtPosition(position:Float, size:CGSize, handler:MediaPlayerThumbnailHandler)
-}
-
-public class ControlsOverlayViewController: UIViewController {
+internal class ControlsOverlayViewController: UIViewController {
     
     class func viewControllerFromStoryboard(mediaItem mediaItem:MediaItemType) -> ControlsOverlayViewController {
         let vc = UIStoryboard(name: "ControlsOverlay", bundle: NSBundle(forClass: self)).instantiateViewControllerWithIdentifier("controls") as! ControlsOverlayViewController
@@ -26,7 +18,7 @@ public class ControlsOverlayViewController: UIViewController {
         case Touches
     }
     
-    public weak var delegate: MediaPlayerThumbnailSnapshotDelegate?
+    internal weak var delegate: MediaPlayerThumbnailSnapshotDelegate?
     
     internal var wideMargins = true
     
@@ -268,15 +260,16 @@ public class ControlsOverlayViewController: UIViewController {
         }
     }
     
-    public var position:Float = 0 {
+    internal var position:Float = 0 {
         didSet {
             var val = min(Float(1.0), position)
             val = max(Float(0), val)
             self.position = val
             guard let rvm = mediaItem else { return }
+            guard progressView != nil else { return }
             let (elapsed, remaining) = rvm.timeStringsAtPosition(val)
-            timeElapsedLabel.text = elapsed
-            timeRemainingLabel.text = "-" + remaining
+            timeElapsedLabel?.text = elapsed
+            timeRemainingLabel?.text = "-" + remaining
             
             let x = CGFloat(position) * progressView.frame.width
             self.thumbnailStackXConstraint.constant = x
@@ -309,7 +302,7 @@ public class ControlsOverlayViewController: UIViewController {
     
     @IBOutlet var controlsOverlayView: UIView!
     
-    override public func viewDidLoad() {
+    override internal func viewDidLoad() {
         super.viewDidLoad()
         
         self.titleLabel.text = mediaItem?.title
@@ -358,7 +351,7 @@ public class ControlsOverlayViewController: UIViewController {
 }
 
 extension ControlsOverlayViewController: MediaPlayerThumbnailHandler {
-    public func setSnapshotImage(image:UIImage, forPosition position:Float) {
+    internal func setSnapshotImage(image:UIImage, forPosition position:Float) {
         self.snapshotImageView?.image = image
     }
 }
