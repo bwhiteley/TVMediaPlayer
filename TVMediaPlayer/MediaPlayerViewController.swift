@@ -27,7 +27,6 @@ public protocol MediaPlayerThumbnailSnapshotDelegate: NSObjectProtocol {
 
 public class MediaPlayerViewController: UIViewController {
     
-    
     public init(mediaPlayer:MediaPlayerType) {
         self.mediaPlayer = mediaPlayer
         self.controls = ControlsOverlayViewController.viewControllerFromStoryboard(mediaItem: mediaPlayer.item)
@@ -102,7 +101,7 @@ public class MediaPlayerViewController: UIViewController {
         }
     }
     
-    private var touchesEndedTimestamp:NSDate?
+    private var touchesEndedTimestamp:NSDate? // used to distinguish universal remote arrow buttons from touchpad taps.
     private var touching:Bool = false {
         didSet {
             touchesEndedTimestamp = NSDate()
@@ -142,7 +141,6 @@ public class MediaPlayerViewController: UIViewController {
         canvasView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         view.addSubview(canvasView)
         
-        
         mediaPlayer.play()
         setupButtons()
         
@@ -163,11 +161,8 @@ public class MediaPlayerViewController: UIViewController {
     }
     
     private func setupButtons() {
-        
         self.view.addGestureRecognizer(swipeRightGestureRecognizer)
         self.view.addGestureRecognizer(swipeLeftGestureRecognizer)
-        
-        
     
         panGestureRecognizer.requireGestureRecognizerToFail(swipeLeftGestureRecognizer)
         panGestureRecognizer.requireGestureRecognizerToFail(swipeRightGestureRecognizer)
@@ -177,7 +172,6 @@ public class MediaPlayerViewController: UIViewController {
         let tap = UITapGestureRecognizer(target: self, action: "menuPressed:")
         tap.allowedPressTypes = [NSNumber(integer: UIPressType.Menu.rawValue)]
         self.view.addGestureRecognizer(tap)
-
     }
     
     internal func menuPressed(gr:UITapGestureRecognizer) {
@@ -259,6 +253,8 @@ public class MediaPlayerViewController: UIViewController {
     }
     
     private func didTapEventComeFromDPad() -> Bool {
+        // We want to ignore tap events from the touchpad. We do this 
+        // by checking to see if the tap event closely follows touch events.
         if touching { return true }
         guard let touchesEndedTimestamp = self.touchesEndedTimestamp else {
             return false
@@ -326,7 +322,6 @@ public class MediaPlayerViewController: UIViewController {
         }
     }
 
-    
     private func playPressed() {
         let state = playerState
         switch state {
@@ -345,9 +340,7 @@ public class MediaPlayerViewController: UIViewController {
     private func mediaPlayerPositionChanged(position:Float) {
         controls.position = position
     }
-    
 }
-
 
 extension MediaPlayerViewController {
     override public func pressesBegan(presses: Set<UIPress>, withEvent event: UIPressesEvent?) {
