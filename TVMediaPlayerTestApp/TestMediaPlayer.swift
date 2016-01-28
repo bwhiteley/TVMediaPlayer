@@ -60,7 +60,7 @@ class TestMediaPlayer: MediaPlayerType, MediaItemType {
     
     var subtitle:String? { return "Subtitle" }
     
-    var length:NSTimeInterval { return playerItem.duration.seconds }
+    var length:Double { return playerItem.duration.seconds }
 }
 
 //

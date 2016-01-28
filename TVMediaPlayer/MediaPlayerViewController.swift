@@ -2,10 +2,26 @@ import UIKit
 import GameController
 
 public protocol MediaPlayerThumbnailHandler: NSObjectProtocol {
+    /**
+     Deliver a thumbnail image for the specified position.
+     
+     - param image: The thumbnail image.
+     
+     - param position: The position represented by the image.
+     */
     func setSnapshotImage(image:UIImage, forPosition position:Float)
 }
 
 public protocol MediaPlayerThumbnailSnapshotDelegate: NSObjectProtocol {
+    /**
+     A thumbnail image is requested at the given position and size.
+     
+     - param position: The position of the requested snapshot.
+     
+     - param size: The size of the requested thumbnail image.
+     
+     - param handler: A thumbnail handler to deliver the image to.
+    */
     func snapshotImageAtPosition(position:Float, size:CGSize, handler:MediaPlayerThumbnailHandler)
 }
 

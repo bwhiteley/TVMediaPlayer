@@ -2,7 +2,9 @@
 public protocol MediaItemType {
     var title:String { get }
     var subtitle:String? { get }
-    var length:NSTimeInterval { get }
+    
+    /// The length of the media item in seconds.
+    var length:Double { get }
 }
 
 extension MediaItemType {
