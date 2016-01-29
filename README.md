@@ -74,3 +74,5 @@ public protocol MediaPlayerThumbnailHandler: NSObjectProtocol {
     func setSnapshotImage(image:UIImage, forPosition position:Float)
 }
 ```
+## Installation
+Carthage is the recommended means of including this framework in a project.
