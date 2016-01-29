@@ -39,7 +39,10 @@ public class MediaPlayerViewController: UIViewController {
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    /**
+     Provide your content in the `canvasView`. For example, 
+     you might add your own subviews or sublayers. 
+    */
     public var canvasView:UIView = UIView()
     
     private let controls:ControlsOverlayViewController
