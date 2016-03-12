@@ -219,7 +219,7 @@ internal class ControlsOverlayViewController: UIViewController {
             switch playerState {
             case .StandardPlay:
                 break
-            case .Fastforward(let rate) where rate < 2:
+            case .Fastforward(let rate) where rate <= 2:
                 break
             default:
                 return
@@ -248,7 +248,7 @@ internal class ControlsOverlayViewController: UIViewController {
         fastForwardAndRewindLabel.hidden = false
         thumbnailContainer?.hidden = true
         
-        if rate < 2.0 {
+        if rate <= 2.0 {
             let token = NSDate()
             temporaryDisplayToken = token
             delay(4) { [weak self] in
