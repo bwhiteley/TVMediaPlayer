@@ -65,17 +65,17 @@ public class MediaPlayerViewController: UIViewController {
     public var dismiss:((position:Float) -> Void)?
     
     private lazy var swipeLeftGestureRecognizer:UISwipeGestureRecognizer = {
-        let gr = UISwipeGestureRecognizer(target: self, action: "swipedLeft:")
+        let gr = UISwipeGestureRecognizer(target: self, action: #selector(swipedLeft(_:)))
         gr.direction = .Left
         return gr
     }()
     private lazy var swipeRightGestureRecognizer:UISwipeGestureRecognizer = {
-        let gr = UISwipeGestureRecognizer(target: self, action: "swipedRight:")
+        let gr = UISwipeGestureRecognizer(target: self, action: #selector(swipedRight(_:)))
         gr.direction = .Right
         return gr
     }()
     private lazy var panGestureRecognizer:UIPanGestureRecognizer = {
-        let pan = UIPanGestureRecognizer(target: self, action: "panning:")
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(panning(_:)))
         pan.enabled = false
         return pan
     }()
@@ -172,7 +172,7 @@ public class MediaPlayerViewController: UIViewController {
         
         self.view.addGestureRecognizer(panGestureRecognizer)
 
-        let tap = UITapGestureRecognizer(target: self, action: "menuPressed:")
+        let tap = UITapGestureRecognizer(target: self, action: #selector(menuPressed(_:)))
         tap.allowedPressTypes = [NSNumber(integer: UIPressType.Menu.rawValue)]
         self.view.addGestureRecognizer(tap)
     }

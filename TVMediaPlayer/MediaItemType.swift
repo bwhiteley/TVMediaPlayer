@@ -33,7 +33,8 @@ extension MediaItemType {
         return length * (1.0 - NSTimeInterval(position))
     }
     
-    func timeStringsAtPosition(var position:Float) -> (elapsed:String, remaining:String) {
+    func timeStringsAtPosition(position:Float) -> (elapsed:String, remaining:String) {
+        var position = position
         if isnan(position) || isinf(position) { position = 0 }
         var length:Float = Float(self.length)
         if isnan(length) || isinf(length) { length = 0 }
