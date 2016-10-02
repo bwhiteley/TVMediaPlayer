@@ -382,7 +382,7 @@ extension MediaPlayerViewController {
         controls.touchesEnded()
     }
     
-    override public func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
+    override public func touchesCancelled(touches: Set<UITouch>, withEvent event: UIEvent?) {
         touching = false
         //NSLog("media touches cancelled")
         super.touchesCancelled(touches, withEvent: event)
