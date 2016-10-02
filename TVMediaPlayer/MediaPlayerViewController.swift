@@ -9,7 +9,7 @@ public protocol MediaPlayerThumbnailHandler: NSObjectProtocol {
      
      - param position: The position represented by the image.
      */
-    func setSnapshotImage(image:UIImage, forPosition position:Float)
+    func setSnapshotImage(_ image:UIImage, forPosition position:Float)
 }
 
 public protocol MediaPlayerThumbnailSnapshotDelegate: NSObjectProtocol {
@@ -22,10 +22,10 @@ public protocol MediaPlayerThumbnailSnapshotDelegate: NSObjectProtocol {
      
      - param handler: A thumbnail handler to deliver the image to.
     */
-    func snapshotImageAtPosition(position:Float, size:CGSize, handler:MediaPlayerThumbnailHandler)
+    func snapshotImageAtPosition(_ position:Float, size:CGSize, handler:MediaPlayerThumbnailHandler)
 }
 
-public class MediaPlayerViewController: UIViewController {
+open class MediaPlayerViewController: UIViewController {
     
     public init(mediaPlayer:MediaPlayerType) {
         self.mediaPlayer = mediaPlayer
@@ -43,17 +43,17 @@ public class MediaPlayerViewController: UIViewController {
      Provide your content in the `canvasView`. For example, 
      you might add your own subviews or sublayers. 
     */
-    public var canvasView:UIView = UIView()
+    open var canvasView:UIView = UIView()
     
-    private let controls:ControlsOverlayViewController
+    fileprivate let controls:ControlsOverlayViewController
 
-    private let panAdjustmentValue:Float = 0.3
+    fileprivate let panAdjustmentValue:Float = 0.3
     
-    public var mediaPlayer:MediaPlayerType
+    open var mediaPlayer:MediaPlayerType
     
-    public var wideMargins:Bool = true
+    open var wideMargins:Bool = true
     
-    public var thumbnailDelegate:MediaPlayerThumbnailSnapshotDelegate? {
+    open var thumbnailDelegate:MediaPlayerThumbnailSnapshotDelegate? {
         get {
             return controls.delegate
         }
@@ -62,86 +62,86 @@ public class MediaPlayerViewController: UIViewController {
         }
     }
     
-    public var dismiss:((position:Float) -> Void)?
+    open var dismiss:((_ position:Float) -> Void)?
     
-    private lazy var swipeLeftGestureRecognizer:UISwipeGestureRecognizer = {
+    fileprivate lazy var swipeLeftGestureRecognizer:UISwipeGestureRecognizer = {
         let gr = UISwipeGestureRecognizer(target: self, action: #selector(swipedLeft(_:)))
-        gr.direction = .Left
+        gr.direction = .left
         return gr
     }()
-    private lazy var swipeRightGestureRecognizer:UISwipeGestureRecognizer = {
+    fileprivate lazy var swipeRightGestureRecognizer:UISwipeGestureRecognizer = {
         let gr = UISwipeGestureRecognizer(target: self, action: #selector(swipedRight(_:)))
-        gr.direction = .Right
+        gr.direction = .right
         return gr
     }()
-    private lazy var panGestureRecognizer:UIPanGestureRecognizer = {
+    fileprivate lazy var panGestureRecognizer:UIPanGestureRecognizer = {
         let pan = UIPanGestureRecognizer(target: self, action: #selector(panning(_:)))
-        pan.enabled = false
+        pan.isEnabled = false
         return pan
     }()
     
-    private var dpadState:DPadState = .Select {
+    fileprivate var dpadState:DPadState = .select {
         didSet {
             guard oldValue != dpadState else { return }
             controls.dpadState = dpadState
         }
     }
     
-    private var playerState:PlayerState = .StandardPlay {
+    fileprivate var playerState:PlayerState = .standardPlay {
         didSet {
             controls.playerState = playerState
             switch playerState {
-            case .StandardPlay:
+            case .standardPlay:
                 play()
-            case let .Rewind(rate):
+            case let .rewind(rate):
                 mediaPlayer.rate = -rate
-            case let .Fastforward(rate):
+            case let .fastforward(rate):
                 mediaPlayer.rate = rate
                 controls.position = mediaPlayer.position
-            case .Pause:
+            case .pause:
                 pause()
             }
         }
     }
     
-    private var touchesEndedTimestamp:NSDate? // used to distinguish universal remote arrow buttons from touchpad taps.
-    private var touching:Bool = false {
+    fileprivate var touchesEndedTimestamp:Date? // used to distinguish universal remote arrow buttons from touchpad taps.
+    fileprivate var touching:Bool = false {
         didSet {
-            touchesEndedTimestamp = NSDate()
+            touchesEndedTimestamp = Date()
         }
     }
     
-    public func play() {
-        panGestureRecognizer.enabled = false
-        swipeRightGestureRecognizer.enabled = true
-        swipeLeftGestureRecognizer.enabled = true
+    open func play() {
+        panGestureRecognizer.isEnabled = false
+        swipeRightGestureRecognizer.isEnabled = true
+        swipeLeftGestureRecognizer.isEnabled = true
         mediaPlayer.play()
         mediaPlayer.rate = 1
     }
     
-    public func pause() {
-        panGestureRecognizer.enabled = true
-        swipeRightGestureRecognizer.enabled = false
-        swipeLeftGestureRecognizer.enabled = false
+    open func pause() {
+        panGestureRecognizer.isEnabled = true
+        swipeRightGestureRecognizer.isEnabled = false
+        swipeLeftGestureRecognizer.isEnabled = false
         controls.position = mediaPlayer.position
         mediaPlayer.pause()
     }
     
-    private func dpadStateForAxis(x x:Float, y: Float) -> DPadState {
+    fileprivate func dpadStateForAxis(x:Float, y: Float) -> DPadState {
         let threshold:Float = 0.7
-        if x > threshold { return .Right }
-        if x < -threshold { return .Left }
-        return .Select
+        if x > threshold { return .right }
+        if x < -threshold { return .left }
+        return .select
     }
     
-    private func dpadChanged(x x:Float, y:Float) {
+    fileprivate func dpadChanged(x:Float, y:Float) {
         self.dpadState = dpadStateForAxis(x: x, y: y)
     }
 
-    override public func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
         self.canvasView.frame = view.bounds
-        canvasView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+        canvasView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(canvasView)
         
         mediaPlayer.play()
@@ -156,44 +156,44 @@ public class MediaPlayerViewController: UIViewController {
         
         controls.wideMargins = self.wideMargins
         controls.view.frame = self.view.bounds
-        controls.view.autoresizingMask = [.FlexibleHeight, .FlexibleWidth]
-        controls.willMoveToParentViewController(self)
+        controls.view.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        controls.willMove(toParentViewController: self)
         self.addChildViewController(controls)
         view.addSubview(controls.view)
-        controls.didMoveToParentViewController(self)
+        controls.didMove(toParentViewController: self)
     }
     
-    private func setupButtons() {
+    fileprivate func setupButtons() {
         self.view.addGestureRecognizer(swipeRightGestureRecognizer)
         self.view.addGestureRecognizer(swipeLeftGestureRecognizer)
     
-        panGestureRecognizer.requireGestureRecognizerToFail(swipeLeftGestureRecognizer)
-        panGestureRecognizer.requireGestureRecognizerToFail(swipeRightGestureRecognizer)
+        panGestureRecognizer.require(toFail: swipeLeftGestureRecognizer)
+        panGestureRecognizer.require(toFail: swipeRightGestureRecognizer)
         
         self.view.addGestureRecognizer(panGestureRecognizer)
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(menuPressed(_:)))
-        tap.allowedPressTypes = [NSNumber(integer: UIPressType.Menu.rawValue)]
+        tap.allowedPressTypes = [NSNumber(value: UIPressType.menu.rawValue as Int)]
         self.view.addGestureRecognizer(tap)
     }
     
-    internal func menuPressed(gr:UITapGestureRecognizer) {
+    internal func menuPressed(_ gr:UITapGestureRecognizer) {
         mediaPlayer.pause()
         if let dismiss = dismiss {
-            dismiss(position: mediaPlayer.position)
+            dismiss(mediaPlayer.position)
         }
         else {
-            self.dismissViewControllerAnimated(true, completion: nil)
+            self.dismiss(animated: true, completion: nil)
         }
     }
     
-    private var initialPanningPosition:Float = 0
+    fileprivate var initialPanningPosition:Float = 0
 
-    func panning(gesture:UIPanGestureRecognizer) {
+    func panning(_ gesture:UIPanGestureRecognizer) {
         
-        let point = gesture.translationInView(gesture.view)
+        let point = gesture.translation(in: gesture.view)
         
-        if case .Began = gesture.state {
+        if case .began = gesture.state {
             initialPanningPosition = controls.position
         }
         
@@ -203,30 +203,30 @@ public class MediaPlayerViewController: UIViewController {
         
     }
     
-    func swipedUp(gesture:UISwipeGestureRecognizer) {
+    func swipedUp(_ gesture:UISwipeGestureRecognizer) {
         switch playerState {
-        case .StandardPlay, .Fastforward, .Rewind:
+        case .standardPlay, .fastforward, .rewind:
             shortJumpAhead()
         default:
             break
         }
     }
 
-    func swipedDown(gesture:UISwipeGestureRecognizer) {
+    func swipedDown(_ gesture:UISwipeGestureRecognizer) {
         switch playerState {
-        case .StandardPlay, .Fastforward, .Rewind:
+        case .standardPlay, .fastforward, .rewind:
             shortJumpBack()
         default:
             break
         }
     }
     
-    func swipedLeft(gesture:UISwipeGestureRecognizer) {
+    func swipedLeft(_ gesture:UISwipeGestureRecognizer) {
         guard let newState = playerState.nextSlowerState() else { return }
         playerState = newState
     }
     
-    func swipedRight(gesture:UISwipeGestureRecognizer) {
+    func swipedRight(_ gesture:UISwipeGestureRecognizer) {
         guard let newState = playerState.nextFasterState() else { return }
         playerState = newState
     }
@@ -255,42 +255,42 @@ public class MediaPlayerViewController: UIViewController {
         flashTimeBar()
     }
     
-    private func didTapEventComeFromDPad() -> Bool {
+    fileprivate func didTapEventComeFromDPad() -> Bool {
         // We want to ignore tap events from the touchpad. We do this 
         // by checking to see if the tap event closely follows touch events.
         if touching { return true }
         guard let touchesEndedTimestamp = self.touchesEndedTimestamp else {
             return false
         }
-        let interval = NSDate().timeIntervalSinceDate(touchesEndedTimestamp)
+        let interval = Date().timeIntervalSince(touchesEndedTimestamp)
         return interval < 0.1
     }
     
-    private func upArrowPressed() {
+    fileprivate func upArrowPressed() {
         guard !didTapEventComeFromDPad() else { return }
-        guard case .StandardPlay = playerState else { return }
+        guard case .standardPlay = playerState else { return }
         longJumpAhead()
     }
     
-    private func downArrowPressed() {
+    fileprivate func downArrowPressed() {
         guard !didTapEventComeFromDPad() else { return }
-        guard case .StandardPlay = playerState else { return }
+        guard case .standardPlay = playerState else { return }
         longJumpBack()
     }
 
-    private func leftArrowPressed() {
+    fileprivate func leftArrowPressed() {
         guard !didTapEventComeFromDPad() else { return }
-        guard case .StandardPlay = playerState else { return }
+        guard case .standardPlay = playerState else { return }
         shortJumpBack()
     }
     
-    private func rightArrowPressed() {
+    fileprivate func rightArrowPressed() {
         guard !didTapEventComeFromDPad() else { return }
-        guard case .StandardPlay = playerState else { return }
+        guard case .standardPlay = playerState else { return }
         shortJumpAhead()
     }
     
-    public static func newPositionByAdjustingPosition(position:Float, bySeconds seconds:Float, length:NSTimeInterval) -> Float {
+    open static func newPositionByAdjustingPosition(_ position:Float, bySeconds seconds:Float, length:TimeInterval) -> Float {
         let delta = seconds / Float(length)
         var newPosition = position + delta
         newPosition = max(newPosition, 0.0)
@@ -298,69 +298,69 @@ public class MediaPlayerViewController: UIViewController {
         return newPosition
     }
 
-    private func selectPressed() {
+    fileprivate func selectPressed() {
         let state = playerState
         switch state {
-        case .StandardPlay, .Rewind, .Fastforward:
+        case .standardPlay, .rewind, .fastforward:
             switch dpadState {
-            case .Select:
+            case .select:
                 switch state {
-                case .Rewind, .Fastforward:
-                    playerState = .StandardPlay
+                case .rewind, .fastforward:
+                    playerState = .standardPlay
                 default:
-                    playerState = .Pause
+                    playerState = .pause
                 }
-            case .Right:
+            case .right:
                 shortJumpAhead()
-            case .Left:
+            case .left:
                 shortJumpBack()
-            case .Up:
+            case .up:
                 longJumpAhead()
-            case .Down:
+            case .down:
                 longJumpBack()
             }
-        case .Pause:
+        case .pause:
             mediaPlayer.position = controls.position
-            playerState = .StandardPlay
+            playerState = .standardPlay
         }
     }
 
-    private func playPressed() {
+    fileprivate func playPressed() {
         let state = playerState
         switch state {
-        case .Pause:
-            playerState = .StandardPlay
-        case .StandardPlay, .Fastforward, .Rewind:
-            playerState = .Pause
+        case .pause:
+            playerState = .standardPlay
+        case .standardPlay, .fastforward, .rewind:
+            playerState = .pause
         }
     }
     
-    private func flashTimeBar() {
+    fileprivate func flashTimeBar() {
         controls.position = mediaPlayer.position
         controls.flashTimeBar()
     }
     
-    private func mediaPlayerPositionChanged(position:Float) {
+    fileprivate func mediaPlayerPositionChanged(_ position:Float) {
         controls.position = position
     }
 }
 
 extension MediaPlayerViewController {
-    override public func pressesBegan(presses: Set<UIPress>, withEvent event: UIPressesEvent?) {
+    override open func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         for item in presses {
             //NSLog("presses began for type: %d", item.type.rawValue)
             switch item.type {
-            case .PlayPause:
+            case .playPause:
                 self.playPressed()
-            case .Select:
+            case .select:
                 self.selectPressed()
-            case .UpArrow:
+            case .upArrow:
                 self.upArrowPressed()
-            case .DownArrow:
+            case .downArrow:
                 self.downArrowPressed()
-            case .LeftArrow:
+            case .leftArrow:
                 self.leftArrowPressed()
-            case .RightArrow:
+            case .rightArrow:
                 self.rightArrowPressed()
             default:
                 break
@@ -368,24 +368,24 @@ extension MediaPlayerViewController {
         }
     }
     
-    override public func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         touching = true
         //NSLog("media touches began")
-        super.touchesBegan(touches, withEvent: event)
+        super.touchesBegan(touches, with: event)
         controls.touchesBegan()
     }
     
-    override public func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         touching = false
         //NSLog("media touches ended")
-        super.touchesEnded(touches, withEvent: event)
+        super.touchesEnded(touches, with: event)
         controls.touchesEnded()
     }
     
-    override public func touchesCancelled(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override open func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         touching = false
         //NSLog("media touches cancelled")
-        super.touchesCancelled(touches, withEvent: event)
+        super.touchesCancelled(touches, with: event)
         controls.touchesEnded()
     }
 }

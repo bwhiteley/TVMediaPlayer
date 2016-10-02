@@ -1,28 +1,28 @@
 
 enum PlayerState {
-    case StandardPlay
-    case Pause
-    case Rewind(rate:Float)
-    case Fastforward(rate:Float)
+    case standardPlay
+    case pause
+    case rewind(rate:Float)
+    case fastforward(rate:Float)
     
     func nextFasterState() -> PlayerState? {
         switch self {
-        case .StandardPlay:
+        case .standardPlay:
             guard let newRate = PlayerState.fastforwardRates.first else {
                 return nil
             }
-            return .Fastforward(rate: newRate)
-        case let .Fastforward(rate):
-            if let index = PlayerState.fastforwardRates.indexOf(rate) where index + 1 < PlayerState.fastforwardRates.count {
-                return .Fastforward(rate: PlayerState.fastforwardRates[index + 1])
+            return .fastforward(rate: newRate)
+        case let .fastforward(rate):
+            if let index = PlayerState.fastforwardRates.index(of: rate) , index + 1 < PlayerState.fastforwardRates.count {
+                return .fastforward(rate: PlayerState.fastforwardRates[index + 1])
             }
             return nil
-        case let .Rewind(rate):
+        case let .rewind(rate):
             if rate == PlayerState.rewindRates.first {
-                return .StandardPlay
+                return .standardPlay
             }
-            if let index = PlayerState.rewindRates.indexOf(rate) where index > 0 {
-                return .Rewind(rate: PlayerState.rewindRates[index - 1])
+            if let index = PlayerState.rewindRates.index(of: rate) , index > 0 {
+                return .rewind(rate: PlayerState.rewindRates[index - 1])
             }
             return nil
         default:
@@ -32,22 +32,22 @@ enum PlayerState {
     
     func nextSlowerState() -> PlayerState? {
         switch self {
-        case .StandardPlay:
+        case .standardPlay:
             guard let newRate = PlayerState.rewindRates.first else {
                 return nil
             }
-            return .Rewind(rate: newRate)
-        case let .Rewind(rate):
-            if let index = PlayerState.rewindRates.indexOf(rate) where index + 1 < PlayerState.rewindRates.count {
-                return .Rewind(rate: PlayerState.rewindRates[index + 1])
+            return .rewind(rate: newRate)
+        case let .rewind(rate):
+            if let index = PlayerState.rewindRates.index(of: rate) , index + 1 < PlayerState.rewindRates.count {
+                return .rewind(rate: PlayerState.rewindRates[index + 1])
             }
             return nil
-        case let .Fastforward(rate):
+        case let .fastforward(rate):
             if rate == PlayerState.fastforwardRates.first {
-                return .StandardPlay
+                return .standardPlay
             }
-            if let index = PlayerState.fastforwardRates.indexOf(rate) where index > 0 {
-                return .Fastforward(rate: PlayerState.fastforwardRates[index - 1])
+            if let index = PlayerState.fastforwardRates.index(of: rate) , index > 0 {
+                return .fastforward(rate: PlayerState.fastforwardRates[index - 1])
             }
             return nil
         default:
@@ -55,8 +55,8 @@ enum PlayerState {
         }
     }
     
-    private static let rewindRates:[Float] = [] // Doesn't seem to work in VLC. [2, 4, 8, 16]
-    private static let fastforwardRates:[Float] = [1.3, 2, 4, 6]
+    fileprivate static let rewindRates:[Float] = [] // Doesn't seem to work in VLC. [2, 4, 8, 16]
+    fileprivate static let fastforwardRates:[Float] = [1.3, 2, 4, 6]
 }
 
 //

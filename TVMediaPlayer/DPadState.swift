@@ -1,18 +1,18 @@
 
 enum DPadState: CustomStringConvertible {
-    case Select
-    case Right
-    case Left
-    case Up
-    case Down
+    case select
+    case right
+    case left
+    case up
+    case down
     
     var description:String {
         switch self {
-        case .Select: return "Select"
-        case .Right: return "Right"
-        case .Left: return "Left"
-        case .Down: return "Down"
-        case .Up: return "Up"
+        case .select: return "Select"
+        case .right: return "Right"
+        case .left: return "Left"
+        case .down: return "Down"
+        case .up: return "Up"
         }
     }
 }

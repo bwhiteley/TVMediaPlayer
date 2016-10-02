@@ -8,7 +8,7 @@ public protocol MediaItemType {
 }
 
 extension MediaItemType {
-    private func timeIntervalDisplayValue(seconds interval:Int) -> String {
+    fileprivate func timeIntervalDisplayValue(seconds interval:Int) -> String {
         let secsInHour = 60 * 60
         let hours = interval / secsInHour
         let remainder = interval % secsInHour
@@ -29,15 +29,15 @@ extension MediaItemType {
         return s
     }
     
-    public func timeRemainingAtPosition(position:Float) -> NSTimeInterval {
-        return length * (1.0 - NSTimeInterval(position))
+    public func timeRemainingAtPosition(_ position:Float) -> TimeInterval {
+        return length * (1.0 - TimeInterval(position))
     }
     
-    func timeStringsAtPosition(position:Float) -> (elapsed:String, remaining:String) {
+    func timeStringsAtPosition(_ position:Float) -> (elapsed:String, remaining:String) {
         var position = position
-        if isnan(position) || isinf(position) { position = 0 }
+        if position.isNaN || position.isInfinite { position = 0 }
         var length:Float = Float(self.length)
-        if isnan(length) || isinf(length) { length = 0 }
+        if length.isNaN || length.isInfinite { length = 0 }
         let secondsElapsed = length * position
         let secondsRemaining = length * (1.0 - position)
         return (timeIntervalDisplayValue(seconds: Int(secondsElapsed)), timeIntervalDisplayValue(seconds: Int(secondsRemaining)))

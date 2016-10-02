@@ -13,16 +13,16 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    @IBAction func playClicked(sender: AnyObject) {
+    @IBAction func playClicked(_ sender: AnyObject) {
         let vc = TestPlayerViewController()
-        self.presentViewController(vc, animated: true, completion: nil)
+        self.present(vc, animated: true, completion: nil)
     }
 
-    @IBAction func controlClicked(sender: AnyObject) {
-        let url = NSURL(string: "https://bennugd-vlc.googlecode.com/files/sintel_trailer-480p.mp4")!
+    @IBAction func controlClicked(_ sender: AnyObject) {
+        let url = URL(string: "https://download.blender.org/durian/trailer/sintel_trailer-1080p.mp4")!
         let vc = AVPlayerViewController()
-        vc.player = AVPlayer(URL: url)
-        self.presentViewController(vc, animated: true, completion: nil)
+        vc.player = AVPlayer(url: url)
+        self.present(vc, animated: true, completion: nil)
         vc.player?.play()
     }
     

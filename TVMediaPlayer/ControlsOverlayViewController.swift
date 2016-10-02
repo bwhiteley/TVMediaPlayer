@@ -2,27 +2,27 @@ import UIKit
 
 internal class ControlsOverlayViewController: UIViewController {
     
-    class func viewControllerFromStoryboard(mediaItem mediaItem:MediaItemType) -> ControlsOverlayViewController {
-        let vc = UIStoryboard(name: "ControlsOverlay", bundle: NSBundle(forClass: self)).instantiateViewControllerWithIdentifier("controls") as! ControlsOverlayViewController
+    class func viewControllerFromStoryboard(mediaItem:MediaItemType) -> ControlsOverlayViewController {
+        let vc = UIStoryboard(name: "ControlsOverlay", bundle: Bundle(for: self)).instantiateViewController(withIdentifier: "controls") as! ControlsOverlayViewController
         vc.mediaItem = mediaItem
         return vc
     }
     
     enum ControlsState {
-        case Hidden
-        case Snapshot
-        case FastForward
-        case Rewind
-        case SkipForward
-        case SkipBack
-        case Touches
+        case hidden
+        case snapshot
+        case fastForward
+        case rewind
+        case skipForward
+        case skipBack
+        case touches
     }
     
     internal weak var delegate: MediaPlayerThumbnailSnapshotDelegate?
     
     internal var wideMargins = true
     
-    private var mediaItem:MediaItemType?
+    fileprivate var mediaItem:MediaItemType?
     
     @IBOutlet var headerView: UIView!
     @IBOutlet var footerView: UIView!
@@ -53,25 +53,25 @@ internal class ControlsOverlayViewController: UIViewController {
     @IBOutlet var verticalMarginConstraints: [NSLayoutConstraint]!
     
     
-    private var temporaryDisplayToken:NSDate?
+    fileprivate var temporaryDisplayToken:Date?
     
-    private var headerAndFooterElements:[UIView?] = []
+    fileprivate var headerAndFooterElements:[UIView?] = []
     
-    private var touching:Bool = false // This is used because `touchesEnded` is called before the last DPad state change.
+    fileprivate var touching:Bool = false // This is used because `touchesEnded` is called before the last DPad state change.
     
-    func setSnapshotViewsHidden(hidden:Bool, animated:Bool = false, completion:(() -> Void)? = nil) {
-        if animated && thumbnailContainer.hidden != hidden && delegate != nil {
+    func setSnapshotViewsHidden(_ hidden:Bool, animated:Bool = false, completion:(() -> Void)? = nil) {
+        if animated && thumbnailContainer.isHidden != hidden && delegate != nil {
             let origHeightConstant = self.snapshotImageHeightConstraint.constant
             if hidden {
                 self.controlsOverlayView?.layoutIfNeeded()
-                UIView.animateWithDuration(0.3, delay: 0, options: .CurveEaseInOut, animations: {
+                UIView.animate(withDuration: 0.3, delay: 0, options: UIViewAnimationOptions(), animations: {
                     defer { self.controlsOverlayView?.layoutIfNeeded() }
                     self.snapshotImageHeightConstraint.constant = 1
                     self.progressLineBottomConstraint.constant = -6
                     self.progressLineHeightConstraint.constant = 22
                     }, completion: { success in
                         guard success else { return }
-                        self.thumbnailContainer.hidden = true
+                        self.thumbnailContainer.isHidden = true
                         self.snapshotImageHeightConstraint.constant = origHeightConstant
                         completion?()
                 })
@@ -79,8 +79,8 @@ internal class ControlsOverlayViewController: UIViewController {
             else {
                 self.snapshotImageHeightConstraint.constant = 1
                 self.controlsOverlayView?.layoutIfNeeded()
-                self.thumbnailContainer.hidden = false
-                UIView.animateWithDuration(0.3, delay: 0, options: .CurveEaseInOut, animations: {
+                self.thumbnailContainer.isHidden = false
+                UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
                     defer { self.controlsOverlayView?.layoutIfNeeded() }
                     self.snapshotImageHeightConstraint.constant = origHeightConstant
                     self.progressLineBottomConstraint.constant = 0
@@ -93,22 +93,22 @@ internal class ControlsOverlayViewController: UIViewController {
         }
         else {
             let hideViews = hidden || delegate == nil
-            self.thumbnailContainer.hidden = hideViews
+            self.thumbnailContainer.isHidden = hideViews
             self.progressLineBottomConstraint.constant = hideViews ? -6 : 0
             self.progressLineHeightConstraint.constant = hideViews ? 22 : 32
             completion?()
         }
     }
     
-    func setHeaderAndFooterElementsHidden(hidden:Bool, animated:Bool = false, completion:(() -> Void)? = nil) {
-        if animated && progressView.hidden != hidden {
+    func setHeaderAndFooterElementsHidden(_ hidden:Bool, animated:Bool = false, completion:(() -> Void)? = nil) {
+        if animated && progressView.isHidden != hidden {
             if hidden {
-                UIView.animateWithDuration(0.3, animations: {
+                UIView.animate(withDuration: 0.3, animations: {
                     self.headerAndFooterElements.forEach { $0?.alpha = 0 }
                 }, completion: { _ in
                     self.headerAndFooterElements.forEach {
                         $0?.alpha = 0
-                        $0?.hidden = true
+                        $0?.isHidden = true
                         completion?()
                     }
                 })
@@ -116,9 +116,9 @@ internal class ControlsOverlayViewController: UIViewController {
             else {
                 self.headerAndFooterElements.forEach {
                     $0?.alpha = 0
-                    $0?.hidden = false
+                    $0?.isHidden = false
                 }
-                UIView.animateWithDuration(0.3, animations: {
+                UIView.animate(withDuration: 0.3, animations: {
                     self.headerAndFooterElements.forEach { $0?.alpha = 1 }
                 }, completion: { _ in
                     completion?()
@@ -126,69 +126,69 @@ internal class ControlsOverlayViewController: UIViewController {
             }
         }
         else {
-            self.headerAndFooterElements.forEach { $0?.hidden = hidden }
+            self.headerAndFooterElements.forEach { $0?.isHidden = hidden }
             completion?()
         }
     }
     
-    var controlsState:ControlsState = .Hidden {
+    var controlsState:ControlsState = .hidden {
         didSet {
             switch controlsState {
-            case .Hidden:
+            case .hidden:
                 setSnapshotViewsHidden(true, animated: true) {
                     self.setHeaderAndFooterElementsHidden(true, animated: true) {
-                        self.view.hidden = true
+                        self.view.isHidden = true
                     }
                 }
-                fastForwardAndRewindLabel.hidden = true
-                skipBackIcon.hidden = true
-                skipForwardIcon.hidden = true
-            case .Snapshot:
-                self.view.hidden = false
+                fastForwardAndRewindLabel.isHidden = true
+                skipBackIcon.isHidden = true
+                skipForwardIcon.isHidden = true
+            case .snapshot:
+                self.view.isHidden = false
                 setHeaderAndFooterElementsHidden(false, animated: true)
                 setSnapshotViewsHidden(false, animated: true)
-                fastForwardAndRewindLabel.hidden = true
-                skipBackIcon.hidden = true
-                skipForwardIcon.hidden = true
-            case .FastForward, .Rewind:
-                view.hidden = false
+                fastForwardAndRewindLabel.isHidden = true
+                skipBackIcon.isHidden = true
+                skipForwardIcon.isHidden = true
+            case .fastForward, .rewind:
+                view.isHidden = false
                 setSnapshotViewsHidden(true, animated: false)
-                fastForwardAndRewindLabel.hidden = false
-                skipBackIcon.hidden = true
-                skipForwardIcon.hidden = true
-            case .SkipBack:
-                view.hidden = false
+                fastForwardAndRewindLabel.isHidden = false
+                skipBackIcon.isHidden = true
+                skipForwardIcon.isHidden = true
+            case .skipBack:
+                view.isHidden = false
                 setSnapshotViewsHidden(true, animated: false)
-                fastForwardAndRewindLabel.hidden = true
-                skipBackIcon.hidden = false
-                skipForwardIcon.hidden = true
-            case .SkipForward:
-                view.hidden = false
+                fastForwardAndRewindLabel.isHidden = true
+                skipBackIcon.isHidden = false
+                skipForwardIcon.isHidden = true
+            case .skipForward:
+                view.isHidden = false
                 setSnapshotViewsHidden(true, animated: false)
-                fastForwardAndRewindLabel.hidden = true
-                skipBackIcon.hidden = true
-                skipForwardIcon.hidden = false
-                timeRemainingLabel.hidden = determineTimeRemainingLabelHidden()
-            case .Touches:
-                view.hidden = false
+                fastForwardAndRewindLabel.isHidden = true
+                skipBackIcon.isHidden = true
+                skipForwardIcon.isHidden = false
+                timeRemainingLabel.isHidden = determineTimeRemainingLabelHidden()
+            case .touches:
+                view.isHidden = false
                 setHeaderAndFooterElementsHidden(false, animated: true)
                 setSnapshotViewsHidden(true, animated: false)
-                fastForwardAndRewindLabel.hidden = true
-                skipBackIcon.hidden = true
-                skipForwardIcon.hidden = true
+                fastForwardAndRewindLabel.isHidden = true
+                skipBackIcon.isHidden = true
+                skipForwardIcon.isHidden = true
             }
         }
     }
     
-    var playerState:PlayerState = .StandardPlay {
+    var playerState:PlayerState = .standardPlay {
         didSet {
             switch playerState {
-            case .StandardPlay:
-                controlsState = .Hidden
-            case .Pause:
-                controlsState = .Snapshot
-            case let .Fastforward(rate):
-                controlsState = .FastForward
+            case .standardPlay:
+                controlsState = .hidden
+            case .pause:
+                controlsState = .snapshot
+            case let .fastforward(rate):
+                controlsState = .fastForward
                 fastForward(rate)
             default:
                 break
@@ -198,45 +198,45 @@ internal class ControlsOverlayViewController: UIViewController {
     
     func touchesBegan() {
         touching = true
-        if controlsState == .Hidden {
-            controlsState = .Touches
+        if controlsState == .hidden {
+            controlsState = .touches
         }
     }
     
     func touchesEnded() {
         touching = false
         switch controlsState {
-        case .Touches, .SkipForward, .SkipBack:
-            controlsState = .Hidden
+        case .touches, .skipForward, .skipBack:
+            controlsState = .hidden
         default:
             break
         }
     }
     
-    var dpadState:DPadState = .Select {
+    var dpadState:DPadState = .select {
         didSet {
             guard touching else { return } // this is called after `touchesEnded`
             switch playerState {
-            case .StandardPlay:
+            case .standardPlay:
                 break
-            case .Fastforward(let rate) where rate <= 2:
+            case .fastforward(let rate) where rate <= 2:
                 break
             default:
                 return
             }
             
             switch dpadState {
-            case .Right:
-                controlsState = .SkipForward
-            case .Left:
-                controlsState = .SkipBack
+            case .right:
+                controlsState = .skipForward
+            case .left:
+                controlsState = .skipBack
             default:
-                controlsState = .Touches
+                controlsState = .touches
             }
         }
     }
 
-    func fastForward(rate:Float) {
+    func fastForward(_ rate:Float) {
         let rateStr:String
         if rate == Float(Int(rate)) {
             rateStr = "\(Int(rate))"
@@ -245,17 +245,17 @@ internal class ControlsOverlayViewController: UIViewController {
             rateStr = "\(rate)"
         }
         fastForwardAndRewindLabel.text = "»\(rateStr)x"
-        fastForwardAndRewindLabel.hidden = false
-        thumbnailContainer?.hidden = true
+        fastForwardAndRewindLabel.isHidden = false
+        thumbnailContainer?.isHidden = true
         
         if rate <= 2.0 {
-            let token = NSDate()
+            let token = Date()
             temporaryDisplayToken = token
             delay(4) { [weak self] in
                 guard let sself = self else { return }
-                guard case let .Fastforward(newRate) = sself.playerState where newRate == rate else { return }
-                guard sself.temporaryDisplayToken === token else { return }
-                self?.controlsState = .Hidden
+                guard case let .fastforward(newRate) = sself.playerState , newRate == rate else { return }
+                guard sself.temporaryDisplayToken == token else { return }
+                self?.controlsState = .hidden
             }
         }
     }
@@ -274,30 +274,30 @@ internal class ControlsOverlayViewController: UIViewController {
             let x = CGFloat(position) * progressView.frame.width
             self.thumbnailStackXConstraint.constant = x
             
-            timeRemainingLabel?.hidden = determineTimeRemainingLabelHidden()
+            timeRemainingLabel?.isHidden = determineTimeRemainingLabelHidden()
             
             guard let snapShotSize = snapshotImageView?.frame.size else { return }
             
-            if case .Pause = playerState {
+            if case .pause = playerState {
                 delegate?.snapshotImageAtPosition(position, size:snapShotSize, handler: self)
             }
         }
     }
     
     func determineTimeRemainingLabelHidden() -> Bool {
-        guard case .SkipForward = controlsState else {
-            return progressView?.hidden ?? true
+        guard case .skipForward = controlsState else {
+            return progressView?.isHidden ?? true
         }
         guard let timeRemainingLabel = timeRemainingLabel,
             let skipForwardIcon = skipForwardIcon,
             let progressView = self.progressView else { return true }
         
-        guard let timeRemainingFrame = skipForwardIcon.superview?.convertRect(timeRemainingLabel.bounds, fromView: timeRemainingLabel) else {
+        guard let timeRemainingFrame = skipForwardIcon.superview?.convert(timeRemainingLabel.bounds, from: timeRemainingLabel) else {
             return true
         }
         
-        let framesIntersect = CGRectIntersectsRect(timeRemainingFrame, skipForwardIcon.frame)
-        return progressView.hidden || (framesIntersect && !skipForwardIcon.hidden)
+        let framesIntersect = timeRemainingFrame.intersects(skipForwardIcon.frame)
+        return progressView.isHidden || (framesIntersect && !skipForwardIcon.isHidden)
     }
     
     @IBOutlet var controlsOverlayView: UIView!
@@ -308,17 +308,17 @@ internal class ControlsOverlayViewController: UIViewController {
         self.titleLabel.text = mediaItem?.title
         self.subtitleLabel.text = mediaItem?.subtitle
         
-        controlsState = .Hidden
+        controlsState = .hidden
         
         var gradient = CAGradientLayer()
         gradient.frame = headerView.bounds
-        gradient.colors = [UIColor.blackColor().CGColor, UIColor.clearColor().CGColor]
-        headerView.layer.insertSublayer(gradient, atIndex: 0)
+        gradient.colors = [UIColor.black.cgColor, UIColor.clear.cgColor]
+        headerView.layer.insertSublayer(gradient, at: 0)
         
         gradient = CAGradientLayer()
         gradient.frame = footerView.bounds
-        gradient.colors = [UIColor.clearColor().CGColor, UIColor.blackColor().CGColor]
-        footerView.layer.insertSublayer(gradient, atIndex: 0)
+        gradient.colors = [UIColor.clear.cgColor, UIColor.black.cgColor]
+        footerView.layer.insertSublayer(gradient, at: 0)
         
         // These aren't subviews of the footer, so we have to adjust them individually. 
         // We should probably fix that sometime.
@@ -338,31 +338,27 @@ internal class ControlsOverlayViewController: UIViewController {
     }
     
     func flashTimeBar() {
-        guard controlsState == .Hidden else { return }
-        controlsState = .Touches
-        let token = NSDate()
+        guard controlsState == .hidden else { return }
+        controlsState = .touches
+        let token = Date()
         temporaryDisplayToken = token
         delay(4) { [weak self] in
-            if self?.temporaryDisplayToken === token {
-                self?.controlsState = .Hidden
+            if self?.temporaryDisplayToken == token {
+                self?.controlsState = .hidden
             }
         }
     }
 }
 
 extension ControlsOverlayViewController: MediaPlayerThumbnailHandler {
-    internal func setSnapshotImage(image:UIImage, forPosition position:Float) {
+    internal func setSnapshotImage(_ image:UIImage, forPosition position:Float) {
         self.snapshotImageView?.image = image
     }
 }
 
-private func delay(delay:Double, closure:()->()) {
-    dispatch_after(
-        dispatch_time(
-            DISPATCH_TIME_NOW,
-            Int64(delay * Double(NSEC_PER_SEC))
-        ),
-        dispatch_get_main_queue(), closure)
+private func delay(_ delay:Double, closure:@escaping ()->()) {
+    DispatchQueue.main.asyncAfter(
+        deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: closure)
 }
 
 //
