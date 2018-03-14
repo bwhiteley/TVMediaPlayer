@@ -177,7 +177,7 @@ open class MediaPlayerViewController: UIViewController {
         self.view.addGestureRecognizer(tap)
     }
     
-    internal func menuPressed(_ gr:UITapGestureRecognizer) {
+    @objc internal func menuPressed(_ gr:UITapGestureRecognizer) {
         mediaPlayer.pause()
         if let dismiss = dismiss {
             dismiss(mediaPlayer.position)
@@ -189,7 +189,7 @@ open class MediaPlayerViewController: UIViewController {
     
     fileprivate var initialPanningPosition:Float = 0
 
-    func panning(_ gesture:UIPanGestureRecognizer) {
+    @objc func panning(_ gesture:UIPanGestureRecognizer) {
         
         let point = gesture.translation(in: gesture.view)
         
@@ -221,12 +221,12 @@ open class MediaPlayerViewController: UIViewController {
         }
     }
     
-    func swipedLeft(_ gesture:UISwipeGestureRecognizer) {
+    @objc func swipedLeft(_ gesture:UISwipeGestureRecognizer) {
         guard let newState = playerState.nextSlowerState() else { return }
         playerState = newState
     }
     
-    func swipedRight(_ gesture:UISwipeGestureRecognizer) {
+    @objc func swipedRight(_ gesture:UISwipeGestureRecognizer) {
         guard let newState = playerState.nextFasterState() else { return }
         playerState = newState
     }
