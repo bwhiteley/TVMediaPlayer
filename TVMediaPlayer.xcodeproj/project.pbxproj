@@ -52,6 +52,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7119348F2058EB1C00479DFB /* Carthage.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Carthage.xcconfig; sourceTree = "<group>"; };
 		711F134A1C40F7ED0096DBAD /* TVMediaPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TVMediaPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		711F134D1C40F7ED0096DBAD /* TVMediaPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TVMediaPlayer.h; sourceTree = "<group>"; };
 		711F134F1C40F7ED0096DBAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -126,6 +127,7 @@
 				711F134D1C40F7ED0096DBAD /* TVMediaPlayer.h */,
 				711F134F1C40F7ED0096DBAD /* Info.plist */,
 				711F13651C41C2900096DBAD /* Images.xcassets */,
+				7119348F2058EB1C00479DFB /* Carthage.xcconfig */,
 			);
 			path = TVMediaPlayer;
 			sourceTree = "<group>";
@@ -304,6 +306,7 @@
 /* Begin XCBuildConfiguration section */
 		711F13501C40F7ED0096DBAD /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7119348F2058EB1C00479DFB /* Carthage.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -353,6 +356,7 @@
 		};
 		711F13511C40F7ED0096DBAD /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7119348F2058EB1C00479DFB /* Carthage.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -405,7 +409,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = TVMediaPlayer/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.swift-bit.TVMediaPlayer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -426,7 +429,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = TVMediaPlayer/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.swift-bit.TVMediaPlayer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

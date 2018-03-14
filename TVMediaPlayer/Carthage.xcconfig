@@ -1,0 +1,31 @@
+//
+//  Frameworks.xcconfig
+//
+
+CARTHAGE_PLATFORM[sdk=iphoneos*] = iOS
+CARTHAGE_PLATFORM[sdk=iphonesimulator*] = iOS
+CARTHAGE_PLATFORM[sdk=watchos*] = watchOS
+CARTHAGE_PLATFORM[sdk=watchsimulator*] = watchOS
+CARTHAGE_PLATFORM[sdk=appletvos*] = tvOS
+CARTHAGE_PLATFORM[sdk=appletvsimulator*] = tvOS
+CARTHAGE_PLATFORM[sdk=macosx*] = Mac
+
+BUILT_FRAMEWORKS_DIR = $(PROJECT_DIR)/Carthage/Build/$(CARTHAGE_PLATFORM)
+
+FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*] = $(inherited) $(BUILT_FRAMEWORKS_DIR)
+FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*] = $(inherited) $(BUILT_FRAMEWORKS_DIR)
+FRAMEWORK_SEARCH_PATHS[sdk=watchos*] = $(inherited) $(BUILT_FRAMEWORKS_DIR)
+FRAMEWORK_SEARCH_PATHS[sdk=watchsimulator*] = $(inherited) $(BUILT_FRAMEWORKS_DIR)
+FRAMEWORK_SEARCH_PATHS[sdk=appletvos*] = $(inherited) $(BUILT_FRAMEWORKS_DIR)
+FRAMEWORK_SEARCH_PATHS[sdk=appletvsimulator*] = $(inherited) $(BUILT_FRAMEWORKS_DIR)
+FRAMEWORK_SEARCH_PATHS[sdk=macosx*] = $(inherited) $(BUILT_FRAMEWORKS_DIR)
+
+LD_RUNPATH_SEARCH_PATHS[sdk=iphoneos*] = $(inherited) @executable_path/Frameworks @loader_path/Frameworks
+LD_RUNPATH_SEARCH_PATHS[sdk=iphonesimulator*] = $(inherited) @executable_path/Frameworks @loader_path/Frameworks $(BUILT_FRAMEWORKS_DIR)
+LD_RUNPATH_SEARCH_PATHS[sdk=watchos*] = $(inherited) @executable_path/Frameworks @loader_path/Frameworks
+LD_RUNPATH_SEARCH_PATHS[sdk=watchsimulator*] = $(inherited) @executable_path/Frameworks @loader_path/Frameworks $(BUILT_FRAMEWORKS_DIR)
+LD_RUNPATH_SEARCH_PATHS[sdk=appletvos*] = $(inherited) @executable_path/Frameworks @loader_path/Frameworks
+LD_RUNPATH_SEARCH_PATHS[sdk=appletvsimulator*] = $(inherited) @executable_path/Frameworks @loader_path/Frameworks $(BUILT_FRAMEWORKS_DIR)
+LD_RUNPATH_SEARCH_PATHS[sdk=macosx*] = $(inherited) @executable_path/Frameworks @loader_path/Frameworks $(BUILT_FRAMEWORKS_DIR)
+
+
