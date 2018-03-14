@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5BFF05C52058B4EB00A21C94 /* MediaTimeRangesType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BFF05C42058B4EB00A21C94 /* MediaTimeRangesType.swift */; };
 		711F134E1C40F7ED0096DBAD /* TVMediaPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 711F134D1C40F7ED0096DBAD /* TVMediaPlayer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		711F135A1C40F9560096DBAD /* ControlsOverlay.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 711F13551C40F9560096DBAD /* ControlsOverlay.storyboard */; };
 		711F135B1C40F9560096DBAD /* ControlsOverlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711F13561C40F9560096DBAD /* ControlsOverlayViewController.swift */; };
@@ -52,6 +53,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5BFF05C42058B4EB00A21C94 /* MediaTimeRangesType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaTimeRangesType.swift; sourceTree = "<group>"; };
 		711F134A1C40F7ED0096DBAD /* TVMediaPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TVMediaPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		711F134D1C40F7ED0096DBAD /* TVMediaPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TVMediaPlayer.h; sourceTree = "<group>"; };
 		711F134F1C40F7ED0096DBAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 				711F13571C40F9560096DBAD /* MediaPlayerViewController.swift */,
 				711F13581C40F9560096DBAD /* MediaItemType.swift */,
 				711F13591C40F9560096DBAD /* MediaPlayerType.swift */,
+				5BFF05C42058B4EB00A21C94 /* MediaTimeRangesType.swift */,
 				711F134D1C40F7ED0096DBAD /* TVMediaPlayer.h */,
 				711F134F1C40F7ED0096DBAD /* Info.plist */,
 				711F13651C41C2900096DBAD /* Images.xcassets */,
@@ -263,6 +266,7 @@
 				711F135D1C40F9560096DBAD /* MediaItemType.swift in Sources */,
 				711F135C1C40F9560096DBAD /* MediaPlayerViewController.swift in Sources */,
 				711F135B1C40F9560096DBAD /* ControlsOverlayViewController.swift in Sources */,
+				5BFF05C52058B4EB00A21C94 /* MediaTimeRangesType.swift in Sources */,
 				711F135E1C40F9560096DBAD /* MediaPlayerType.swift in Sources */,
 				711F136A1C41C64D0096DBAD /* PlayerState.swift in Sources */,
 				711F13691C41C64D0096DBAD /* DPadState.swift in Sources */,
