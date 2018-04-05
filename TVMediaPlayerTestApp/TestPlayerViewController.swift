@@ -16,7 +16,7 @@ class TestPlayerViewController:MediaPlayerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let playerLayer = AVPlayerLayer(player: self.testMediaPlayer.player)
-        playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+        playerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
         playerLayer.frame = canvasView.bounds
         self.canvasView.layer.addSublayer(playerLayer)
     }
