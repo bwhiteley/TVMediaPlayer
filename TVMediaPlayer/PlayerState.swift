@@ -13,7 +13,7 @@ enum PlayerState {
             }
             return .fastforward(rate: newRate)
         case let .fastforward(rate):
-            if let index = PlayerState.fastforwardRates.index(of: rate) , index + 1 < PlayerState.fastforwardRates.count {
+            if let index = PlayerState.fastforwardRates.firstIndex(of: rate) , index + 1 < PlayerState.fastforwardRates.count {
                 return .fastforward(rate: PlayerState.fastforwardRates[index + 1])
             }
             return nil
@@ -21,7 +21,7 @@ enum PlayerState {
             if rate == PlayerState.rewindRates.first {
                 return .standardPlay
             }
-            if let index = PlayerState.rewindRates.index(of: rate) , index > 0 {
+            if let index = PlayerState.rewindRates.firstIndex(of: rate) , index > 0 {
                 return .rewind(rate: PlayerState.rewindRates[index - 1])
             }
             return nil
@@ -38,7 +38,7 @@ enum PlayerState {
             }
             return .rewind(rate: newRate)
         case let .rewind(rate):
-            if let index = PlayerState.rewindRates.index(of: rate) , index + 1 < PlayerState.rewindRates.count {
+            if let index = PlayerState.rewindRates.firstIndex(of: rate) , index + 1 < PlayerState.rewindRates.count {
                 return .rewind(rate: PlayerState.rewindRates[index + 1])
             }
             return nil
@@ -46,7 +46,7 @@ enum PlayerState {
             if rate == PlayerState.fastforwardRates.first {
                 return .standardPlay
             }
-            if let index = PlayerState.fastforwardRates.index(of: rate) , index > 0 {
+            if let index = PlayerState.fastforwardRates.firstIndex(of: rate) , index > 0 {
                 return .fastforward(rate: PlayerState.fastforwardRates[index - 1])
             }
             return nil

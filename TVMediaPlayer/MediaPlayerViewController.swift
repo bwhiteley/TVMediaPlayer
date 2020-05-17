@@ -157,10 +157,10 @@ open class MediaPlayerViewController: UIViewController {
         controls.wideMargins = self.wideMargins
         controls.view.frame = self.view.bounds
         controls.view.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        controls.willMove(toParentViewController: self)
-        self.addChildViewController(controls)
+        controls.willMove(toParent: self)
+        self.addChild(controls)
         view.addSubview(controls.view)
-        controls.didMove(toParentViewController: self)
+        controls.didMove(toParent: self)
     }
     
     fileprivate func setupButtons() {
@@ -173,7 +173,7 @@ open class MediaPlayerViewController: UIViewController {
         self.view.addGestureRecognizer(panGestureRecognizer)
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(menuPressed(_:)))
-        tap.allowedPressTypes = [NSNumber(value: UIPressType.menu.rawValue as Int)]
+        tap.allowedPressTypes = [NSNumber(value: UIPress.PressType.menu.rawValue as Int)]
         self.view.addGestureRecognizer(tap)
     }
     
@@ -290,7 +290,7 @@ open class MediaPlayerViewController: UIViewController {
         shortJumpAhead()
     }
     
-    open static func newPositionByAdjustingPosition(_ position:Float, bySeconds seconds:Float, length:TimeInterval) -> Float {
+    public static func newPositionByAdjustingPosition(_ position:Float, bySeconds seconds:Float, length:TimeInterval) -> Float {
         let delta = seconds / Float(length)
         var newPosition = position + delta
         newPosition = max(newPosition, 0.0)

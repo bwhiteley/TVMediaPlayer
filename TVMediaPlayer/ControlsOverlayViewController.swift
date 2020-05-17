@@ -64,7 +64,7 @@ internal class ControlsOverlayViewController: UIViewController {
             let origHeightConstant = self.snapshotImageHeightConstraint.constant
             if hidden {
                 self.controlsOverlayView?.layoutIfNeeded()
-                UIView.animate(withDuration: 0.3, delay: 0, options: UIViewAnimationOptions(), animations: {
+                UIView.animate(withDuration: 0.3, delay: 0, options: UIView.AnimationOptions(), animations: {
                     defer { self.controlsOverlayView?.layoutIfNeeded() }
                     self.snapshotImageHeightConstraint.constant = 1
                     self.progressLineBottomConstraint.constant = -6
