@@ -3,7 +3,7 @@ import UIKit
 internal class ControlsOverlayViewController: UIViewController {
     
     class func viewControllerFromStoryboard(mediaItem:MediaItemType) -> ControlsOverlayViewController {
-        let vc = UIStoryboard(name: "ControlsOverlay", bundle: Bundle(for: self)).instantiateViewController(withIdentifier: "controls") as! ControlsOverlayViewController
+        let vc = UIStoryboard(name: "ControlsOverlay", bundle: Bundle.module).instantiateViewController(withIdentifier: "controls") as! ControlsOverlayViewController
         vc.mediaItem = mediaItem
         return vc
     }

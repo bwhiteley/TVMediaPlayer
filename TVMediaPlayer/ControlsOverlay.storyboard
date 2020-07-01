@@ -9,7 +9,7 @@
         <!--Controls Overlay View Controller-->
         <scene sceneID="o2d-lV-BDF">
             <objects>
-                <viewController storyboardIdentifier="controls" id="gJS-YY-TKT" customClass="ControlsOverlayViewController" customModule="TVMediaPlayer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="controls" id="gJS-YY-TKT" customClass="ControlsOverlayViewController" customModule="TVMediaPlayer" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="E8X-Ui-Gus"/>
                         <viewControllerLayoutGuide type="bottom" id="UW9-hI-dop"/>

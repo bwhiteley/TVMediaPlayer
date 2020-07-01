@@ -1,3 +1,4 @@
+import Foundation
 
 public protocol MediaItemType {
     var title:String { get }
