@@ -19,7 +19,7 @@ class ViewController: UIViewController {
     }
 
     @IBAction func controlClicked(_ sender: AnyObject) {
-        let url = URL(string: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_30MB.mp4")!
+        let url = URL(string: "https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8")!
         let vc = AVPlayerViewController()
         vc.player = AVPlayer(url: url)
         self.present(vc, animated: true, completion: nil)

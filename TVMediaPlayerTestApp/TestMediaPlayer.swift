@@ -5,7 +5,7 @@ import AVFoundation
 class TestMediaPlayer: MediaPlayerType, MediaItemType {
     
     lazy var playerItem:AVPlayerItem = {
-        let url = URL(string: "https://download.blender.org/durian/trailer/sintel_trailer-1080p.mp4")!
+        let url = URL(string: "https://cdn.theoplayer.com/video/big_buck_bunny/big_buck_bunny.m3u8")!
         return AVPlayerItem(url: url)
     }()
     
