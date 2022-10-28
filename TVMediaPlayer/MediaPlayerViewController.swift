@@ -147,11 +147,12 @@ open class MediaPlayerViewController: UIViewController {
         mediaPlayer.play()
         setupButtons()
         
-        guard let controller = GCController.controllers().first else { return }
-        guard let micro = controller.microGamepad else { return }
-        micro.reportsAbsoluteDpadValues = true
-        micro.dpad.valueChangedHandler = { [weak self] (pad, x, y) in
-            self?.dpadChanged(x:x, y: y)
+        if let controller = GCController.controllers().first,
+           let micro = controller.microGamepad {
+            micro.reportsAbsoluteDpadValues = true
+            micro.dpad.valueChangedHandler = { [weak self] (pad, x, y) in
+                self?.dpadChanged(x:x, y: y)
+            }
         }
         
         controls.wideMargins = self.wideMargins
