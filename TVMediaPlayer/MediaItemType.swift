@@ -30,14 +30,14 @@ extension MediaItemType {
         return s
     }
     
-    public func timeRemainingAtPosition(_ position:Float) -> TimeInterval {
+    public func timeRemainingAtPosition(_ position:Double) -> TimeInterval {
         return length * (1.0 - TimeInterval(position))
     }
     
-    func timeStringsAtPosition(_ position:Float) -> (elapsed:String, remaining:String) {
+    func timeStringsAtPosition(_ position:Double) -> (elapsed:String, remaining:String) {
         var position = position
         if position.isNaN || position.isInfinite { position = 0 }
-        var length:Float = Float(self.length)
+        var length = self.length
         if length.isNaN || length.isInfinite { length = 0 }
         let secondsElapsed = length * position
         let secondsRemaining = length * (1.0 - position)

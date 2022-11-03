@@ -236,9 +236,9 @@ internal class ControlsOverlayViewController: UIViewController {
         }
     }
 
-    func fastForward(_ rate:Float) {
+    func fastForward(_ rate:Double) {
         let rateStr:String
-        if rate == Float(Int(rate)) {
+        if rate == Double(Int(rate)) {
             rateStr = "\(Int(rate))"
         }
         else {
@@ -260,10 +260,10 @@ internal class ControlsOverlayViewController: UIViewController {
         }
     }
     
-    internal var position:Float = 0 {
+    internal var position:Double = 0 {
         didSet {
-            var val = min(Float(1.0), position)
-            val = max(Float(0), val)
+            var val = min(Double(1.0), position)
+            val = max(Double(0), val)
             self.position = val
             guard let rvm = mediaItem else { return }
             guard progressView != nil else { return }

@@ -2,8 +2,8 @@
 enum PlayerState {
     case standardPlay
     case pause
-    case rewind(rate:Float)
-    case fastforward(rate:Float)
+    case rewind(rate:Double)
+    case fastforward(rate:Double)
     
     func nextFasterState() -> PlayerState? {
         switch self {
@@ -55,8 +55,8 @@ enum PlayerState {
         }
     }
     
-    fileprivate static let rewindRates:[Float] = [] // Doesn't seem to work in VLC. [2, 4, 8, 16]
-    fileprivate static let fastforwardRates:[Float] = [1.3, 2, 4, 6]
+    fileprivate static let rewindRates:[Double] = [2, 4, 8, 16]
+    fileprivate static let fastforwardRates:[Double] = [1.3, 2, 4, 6]
 }
 
 //

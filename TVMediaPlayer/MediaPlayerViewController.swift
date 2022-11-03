@@ -22,7 +22,7 @@ public protocol MediaPlayerThumbnailSnapshotDelegate: NSObjectProtocol {
      
      - param handler: A thumbnail handler to deliver the image to.
     */
-    func snapshotImageAtPosition(_ position:Float, size:CGSize, handler:MediaPlayerThumbnailHandler)
+    func snapshotImageAtPosition(_ position:Double, size:CGSize, handler:MediaPlayerThumbnailHandler)
 }
 
 open class MediaPlayerViewController: UIViewController {
@@ -48,7 +48,7 @@ open class MediaPlayerViewController: UIViewController {
     
     fileprivate let controls:ControlsOverlayViewController
 
-    fileprivate let panAdjustmentValue:Float = 0.3
+    fileprivate let panAdjustmentValue:Double = 0.3
     
     open var mediaPlayer:MediaPlayerType
     
@@ -63,7 +63,7 @@ open class MediaPlayerViewController: UIViewController {
         }
     }
     
-    open var dismiss:((_ position:Float) -> Void)?
+    open var dismiss:((_ position:Double) -> Void)?
     
     fileprivate lazy var swipeLeftGestureRecognizer:UISwipeGestureRecognizer = {
         let gr = UISwipeGestureRecognizer(target: self, action: #selector(swipedLeft(_:)))
@@ -189,7 +189,7 @@ open class MediaPlayerViewController: UIViewController {
         }
     }
     
-    fileprivate var initialPanningPosition:Float = 0
+    fileprivate var initialPanningPosition:Double = 0
 
     @objc func panning(_ gesture:UIPanGestureRecognizer) {
         
@@ -199,7 +199,7 @@ open class MediaPlayerViewController: UIViewController {
             initialPanningPosition = controls.position
         }
         
-        let delta:Float = panAdjustmentValue * Float(point.x) / Float(self.view.frame.width)
+        let delta = panAdjustmentValue * point.x / self.view.frame.width
         let newProgress = initialPanningPosition + delta
         controls.position = newProgress
         
@@ -234,7 +234,7 @@ open class MediaPlayerViewController: UIViewController {
     }
     
     func shortJumpAhead() {
-        let position = MediaPlayerViewController.newPositionByAdjustingPosition(mediaPlayer.position, bySeconds: 30, length: mediaPlayer.item.length)
+        let position = MediaPlayerViewController.newPositionByAdjustingPosition(mediaPlayer.position, bySeconds: 10, length: mediaPlayer.item.length)
         self.mediaPlayer.position = position
         flashTimeBar()
     }
@@ -269,31 +269,31 @@ open class MediaPlayerViewController: UIViewController {
     }
     
     fileprivate func upArrowPressed() {
-        guard !didTapEventComeFromDPad() else { return }
+        //guard !didTapEventComeFromDPad() else { return }
         guard case .standardPlay = playerState else { return }
         longJumpAhead()
     }
     
     fileprivate func downArrowPressed() {
-        guard !didTapEventComeFromDPad() else { return }
+        //guard !didTapEventComeFromDPad() else { return }
         guard case .standardPlay = playerState else { return }
         longJumpBack()
     }
 
     fileprivate func leftArrowPressed() {
-        guard !didTapEventComeFromDPad() else { return }
+        //guard !didTapEventComeFromDPad() else { return }
         guard case .standardPlay = playerState else { return }
         shortJumpBack()
     }
     
     fileprivate func rightArrowPressed() {
-        guard !didTapEventComeFromDPad() else { return }
+        //guard !didTapEventComeFromDPad() else { return }
         guard case .standardPlay = playerState else { return }
         shortJumpAhead()
     }
     
-    public static func newPositionByAdjustingPosition(_ position:Float, bySeconds seconds:Float, length:TimeInterval) -> Float {
-        let delta = seconds / Float(length)
+    public static func newPositionByAdjustingPosition(_ position:Double, bySeconds seconds:Double, length:TimeInterval) -> Double {
+        let delta = seconds / length
         var newPosition = position + delta
         newPosition = max(newPosition, 0.0)
         newPosition = min(newPosition, 1.0)
@@ -342,7 +342,7 @@ open class MediaPlayerViewController: UIViewController {
         controls.flashTimeBar()
     }
     
-    fileprivate func mediaPlayerPositionChanged(_ position:Float) {
+    fileprivate func mediaPlayerPositionChanged(_ position:Double) {
         controls.position = position
     }
 }

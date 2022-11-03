@@ -14,14 +14,14 @@ class TestMediaPlayer: MediaPlayerType, MediaItemType {
         player.addPeriodicTimeObserver(forInterval: CMTime(value: 10, timescale: 1000), queue: nil) { [weak self] time in
             guard let sself = self else { return }
             let position = time.seconds / sself.length
-            sself.positionChanged?(Float(position))
+            sself.positionChanged?(position)
         }
         return player
     }()
     
     var item:MediaItemType { return self }
     
-    var positionChanged:((_ position:Float) -> Void)?
+    var positionChanged:((_ position:Double) -> Void)?
     
     func play() {
         player.play()
@@ -35,18 +35,18 @@ class TestMediaPlayer: MediaPlayerType, MediaItemType {
         player.pause()
     }
     
-    var rate:Float {
+    var rate:Double {
         get {
-            return player.rate
+            return Double(player.rate)
         }
         set {
-            player.rate = newValue
+            player.rate = Float(newValue)
         }
     }
         
-    var position:Float {
+    var position:Double {
         get {
-            return Float(player.currentTime().seconds / playerItem.duration.seconds)
+            return player.currentTime().seconds / playerItem.duration.seconds
         }
         set {
             let scale:Int32 = 1000
