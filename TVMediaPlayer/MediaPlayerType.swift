@@ -17,6 +17,9 @@ public protocol MediaPlayerType {
     /// During playback, call this closure at intervals frequently 
     /// enough to allow the scrubber to update smoothly, if visible.
     var positionChanged:((_ position:Double) -> Void)? { get set }
+    
+    var textTracks: [String] { get }
+    var activeTextTrack: Int? { get set }
 }
 
 //

@@ -50,6 +50,8 @@ open class MediaPlayerViewController: UIViewController {
 
     fileprivate let panAdjustmentValue:Double = 0.3
     
+    private weak var captionView: CaptionView?
+    
     open var mediaPlayer:MediaPlayerType
     
     open var wideMargins:Bool = true
@@ -73,6 +75,16 @@ open class MediaPlayerViewController: UIViewController {
     fileprivate lazy var swipeRightGestureRecognizer:UISwipeGestureRecognizer = {
         let gr = UISwipeGestureRecognizer(target: self, action: #selector(swipedRight(_:)))
         gr.direction = .right
+        return gr
+    }()
+    fileprivate lazy var swipeUpGestureRecognizer:UISwipeGestureRecognizer = {
+        let gr = UISwipeGestureRecognizer(target: self, action: #selector(swipedUp(_:)))
+        gr.direction = .up
+        return gr
+    }()
+    fileprivate lazy var swipeDownGestureRecognizer:UISwipeGestureRecognizer = {
+        let gr = UISwipeGestureRecognizer(target: self, action: #selector(swipedDown(_:)))
+        gr.direction = .down
         return gr
     }()
     fileprivate lazy var panGestureRecognizer:UIPanGestureRecognizer = {
@@ -168,6 +180,8 @@ open class MediaPlayerViewController: UIViewController {
     fileprivate func setupButtons() {
         self.view.addGestureRecognizer(swipeRightGestureRecognizer)
         self.view.addGestureRecognizer(swipeLeftGestureRecognizer)
+        self.view.addGestureRecognizer(swipeDownGestureRecognizer)
+        self.view.addGestureRecognizer(swipeUpGestureRecognizer)
     
         panGestureRecognizer.require(toFail: swipeLeftGestureRecognizer)
         panGestureRecognizer.require(toFail: swipeRightGestureRecognizer)
@@ -205,31 +219,55 @@ open class MediaPlayerViewController: UIViewController {
         
     }
     
-    func swipedUp(_ gesture:UISwipeGestureRecognizer) {
-        switch playerState {
-        case .standardPlay, .fastforward, .rewind:
-            shortJumpAhead()
-        default:
-            break
-        }
+    @objc func swipedUp(_ gesture:UISwipeGestureRecognizer) {
+        if captionView == nil { return }
+        dismissCaptionView()
     }
 
-    func swipedDown(_ gesture:UISwipeGestureRecognizer) {
-        switch playerState {
-        case .standardPlay, .fastforward, .rewind:
-            shortJumpBack()
-        default:
-            break
+    private let captionViewHeight:CGFloat = 245
+    private func showCaptionView() {
+        let captionView = CaptionView(frame: .init(x: 0, y: -captionViewHeight, width: view.frame.width, height: captionViewHeight))
+        view.addSubview(captionView)
+        captionView.configure(labels: mediaPlayer.textTracks, selected: mediaPlayer.activeTextTrack) { [weak self] newTrack in
+            self?.mediaPlayer.activeTextTrack = newTrack
         }
+        captionView.dismissHandler = { [weak self] in
+            self?.dismissCaptionView()
+        }
+        self.captionView = captionView
+        UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseOut]) { [weak self] in
+            self?.view.setNeedsLayout()
+            captionView.frame.origin.y = 0
+            self?.view.setNeedsLayout()
+        }
+    }
+    
+    private func dismissCaptionView() {
+        guard let captionView = self.captionView else { return }
+        self.captionView = nil
+        UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn], animations: { [weak self] in
+            guard let height = self?.captionViewHeight else { return }
+            self?.view.setNeedsLayout()
+            captionView.frame.origin.y = -height
+            self?.view.setNeedsLayout()
+        }, completion: { _ in
+            captionView.removeFromSuperview()
+        })
+    }
+    
+    @objc func swipedDown(_ gesture:UISwipeGestureRecognizer) {
+        showCaptionView()
     }
     
     @objc func swipedLeft(_ gesture:UISwipeGestureRecognizer) {
         guard let newState = playerState.nextSlowerState() else { return }
+        guard captionView == nil else { return }
         playerState = newState
     }
     
     @objc func swipedRight(_ gesture:UISwipeGestureRecognizer) {
         guard let newState = playerState.nextFasterState() else { return }
+        guard captionView == nil else { return }
         playerState = newState
     }
     
