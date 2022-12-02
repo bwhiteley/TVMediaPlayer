@@ -6,6 +6,8 @@ public protocol MediaItemType {
     
     /// The length of the media item in seconds.
     var length:Double { get }
+    
+    func adBreaks() async throws -> [AdBreak]
 }
 
 extension MediaItemType {
@@ -44,6 +46,15 @@ extension MediaItemType {
         return (timeIntervalDisplayValue(seconds: Int(secondsElapsed)), timeIntervalDisplayValue(seconds: Int(secondsRemaining)))
     }
 
+}
+
+public struct AdBreak {
+    public init(location: Double) {
+        self.location = location
+    }
+    
+    // value between 0 and 1 indicating the position of the ad break.
+    var location: Double
 }
 
 //

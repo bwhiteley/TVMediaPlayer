@@ -22,7 +22,7 @@ internal class ControlsOverlayViewController: UIViewController {
     
     internal var wideMargins = true
     
-    fileprivate var mediaItem:MediaItemType?
+    fileprivate var mediaItem:MediaItemType!
     
     @IBOutlet var headerView: UIView!
     @IBOutlet var footerView: UIView!
