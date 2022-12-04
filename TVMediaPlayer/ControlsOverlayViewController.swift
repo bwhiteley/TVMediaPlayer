@@ -52,6 +52,7 @@ internal class ControlsOverlayViewController: UIViewController {
     @IBOutlet var horizontalMarginConstraints: [NSLayoutConstraint]!
     @IBOutlet var verticalMarginConstraints: [NSLayoutConstraint]!
     
+    private let adBreakContainer = UIView()
     
     fileprivate var temporaryDisplayToken:Date?
     
@@ -324,7 +325,7 @@ internal class ControlsOverlayViewController: UIViewController {
         // We should probably fix that sometime.
         headerAndFooterElements = [titleLabel, subtitleLabel,
             progressView, timeRemainingLabel, timeElapsedLabel,
-            headerView, footerView, lineView
+            headerView, footerView, lineView, adBreakContainer
         ]
         
         if !wideMargins {
@@ -333,6 +334,26 @@ internal class ControlsOverlayViewController: UIViewController {
             }
             verticalMarginConstraints.forEach {
                 $0.constant = 30
+            }
+        }
+        
+        adBreakContainer.frame = progressView.frame
+        adBreakContainer.backgroundColor = .clear
+        progressView.superview?.addSubview(adBreakContainer)
+        
+        Task { @MainActor in
+            do {
+                for ad in try await mediaItem.adBreaks() {
+                    let view = UIView()
+                    let x: CGFloat = progressView.bounds.width * ad.location
+                    view.frame = .init(x: x - 2, y: -5, width: 4, height: 20)
+                    view.backgroundColor = UIColor(white: CGFloat(235) / CGFloat(255), alpha: 1)
+                    adBreakContainer.addSubview(view)
+                    view.layer.cornerRadius = 2
+                    view.clipsToBounds = true
+                }
+            } catch {
+                
             }
         }
     }
