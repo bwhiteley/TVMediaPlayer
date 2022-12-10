@@ -2,9 +2,10 @@ import UIKit
 
 internal class ControlsOverlayViewController: UIViewController {
     
-    class func viewControllerFromStoryboard(mediaItem:MediaItemType) -> ControlsOverlayViewController {
+    class func viewControllerFromStoryboard(mediaItem:MediaItemType, controlsCustomization: ControlsOverlayCustomization) -> ControlsOverlayViewController {
         let vc = UIStoryboard(name: "ControlsOverlay", bundle: Bundle.module).instantiateViewController(withIdentifier: "controls") as! ControlsOverlayViewController
         vc.mediaItem = mediaItem
+        vc.controlsCustomization = controlsCustomization
         return vc
     }
     
@@ -24,11 +25,15 @@ internal class ControlsOverlayViewController: UIViewController {
     
     fileprivate var mediaItem:MediaItemType!
     
+    private var controlsCustomization: ControlsOverlayCustomization!
+    
     @IBOutlet var headerView: UIView!
     @IBOutlet var footerView: UIView!
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var subtitleLabel: UILabel!
-
+    @IBOutlet var adTimeRemainingLabel: UILabel!
+    @IBOutlet var brandLogoImageView: UIImageView!
+    
     @IBOutlet var progressView: UIVisualEffectView! {
         didSet {
             progressView.layer.masksToBounds = true
@@ -59,6 +64,14 @@ internal class ControlsOverlayViewController: UIViewController {
     fileprivate var headerAndFooterElements:[UIView?] = []
     
     fileprivate var touching:Bool = false // This is used because `touchesEnded` is called before the last DPad state change.
+    
+    private func customizeUI() {
+        brandLogoImageView.image = controlsCustomization.brandLogo
+        titleLabel.font = controlsCustomization.titleFont
+        titleLabel.textColor = controlsCustomization.textColor
+        subtitleLabel.font = controlsCustomization.subtitleFont
+        subtitleLabel.textColor = controlsCustomization.textColor
+    }
     
     func setSnapshotViewsHidden(_ hidden:Bool, animated:Bool = false, completion:(() -> Void)? = nil) {
         if animated && thumbnailContainer.isHidden != hidden && delegate != nil {
@@ -309,6 +322,7 @@ internal class ControlsOverlayViewController: UIViewController {
         self.titleLabel.text = mediaItem?.title
         self.subtitleLabel.text = mediaItem?.subtitle
         
+        adTimeRemainingLabel.isHidden = true
         controlsState = .hidden
         
         var gradient = CAGradientLayer()
@@ -356,6 +370,7 @@ internal class ControlsOverlayViewController: UIViewController {
                 
             }
         }
+        customizeUI()
     }
     
     func flashTimeBar() {

@@ -27,9 +27,9 @@ public protocol MediaPlayerThumbnailSnapshotDelegate: NSObjectProtocol {
 
 open class MediaPlayerViewController: UIViewController {
     
-    public init(mediaPlayer:MediaPlayerType) {
+    public init(mediaPlayer:MediaPlayerType, controlsCustomization: ControlsOverlayCustomization = .default) {
         self.mediaPlayer = mediaPlayer
-        self.controls = ControlsOverlayViewController.viewControllerFromStoryboard(mediaItem: mediaPlayer.item)
+        self.controls = ControlsOverlayViewController.viewControllerFromStoryboard(mediaItem: mediaPlayer.item, controlsCustomization: controlsCustomization)
         super.init(nibName: nil, bundle: nil)
         self.mediaPlayer.positionChanged = { [weak self] newPosition in
             self?.mediaPlayerPositionChanged(newPosition)

@@ -20,6 +20,8 @@ public protocol MediaPlayerType {
     
     var textTracks: [String] { get }
     var activeTextTrack: Int? { get set }
+    
+    var isPlayingAd: Bool { get } 
 }
 
 //
