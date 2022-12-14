@@ -25,7 +25,7 @@ internal class ControlsOverlayViewController: UIViewController {
     
     fileprivate var mediaItem:MediaItemType!
     
-    private var controlsCustomization: ControlsOverlayCustomization!
+    var controlsCustomization: ControlsOverlayCustomization!
     
     @IBOutlet var headerView: UIView!
     @IBOutlet var footerView: UIView!
@@ -60,6 +60,8 @@ internal class ControlsOverlayViewController: UIViewController {
     private let adBreakContainer = UIView()
     
     fileprivate var temporaryDisplayToken:Date?
+    
+    internal let headerCustomContentView = UIView()
     
     fileprivate var headerAndFooterElements:[UIView?] = []
     
@@ -319,10 +321,12 @@ internal class ControlsOverlayViewController: UIViewController {
     override internal func viewDidLoad() {
         super.viewDidLoad()
         
+        position = 0
+        adTimeRemainingLabel.text = nil
         self.titleLabel.text = mediaItem?.title
         self.subtitleLabel.text = mediaItem?.subtitle
         
-        adTimeRemainingLabel.isHidden = true
+        //adTimeRemainingLabel.isHidden = true
         controlsState = .hidden
         
         var gradient = CAGradientLayer()
@@ -370,6 +374,9 @@ internal class ControlsOverlayViewController: UIViewController {
                 
             }
         }
+        headerCustomContentView.backgroundColor = .clear
+        headerCustomContentView.frame = headerView.bounds
+        headerView.addSubview(headerCustomContentView)
         customizeUI()
     }
     

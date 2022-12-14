@@ -46,6 +46,12 @@ open class MediaPlayerViewController: UIViewController {
     */
     open var canvasView:UIView = UIView()
     
+    public var headerCustomContentView: UIView {
+        get {
+            return controls.headerCustomContentView
+        }
+    }
+    
     fileprivate let controls:ControlsOverlayViewController
 
     fileprivate let panAdjustmentValue:Double = 0.3
@@ -381,8 +387,20 @@ open class MediaPlayerViewController: UIViewController {
     }
     
     fileprivate func mediaPlayerPositionChanged(_ position:Double) {
-        controls.position = position
+        if mediaPlayer.isPlayingAd {
+            let length = mediaPlayer.item.length
+            if !position.isNaN, !position.isInfinite, !length.isNaN, !length.isInfinite {
+                
+            controls.adTimeRemainingLabel.attributedText = controls.controlsCustomization.adSecondsRemainingString(Int( length - position * length))
+            } else {
+                controls.adTimeRemainingLabel.attributedText = nil
+            }
+        } else {
+            controls.adTimeRemainingLabel.attributedText = nil
+            controls.position = position
+        }
     }
+    
 }
 
 extension MediaPlayerViewController {
