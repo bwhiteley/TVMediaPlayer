@@ -44,7 +44,7 @@ internal class ControlsOverlayViewController: UIViewController {
     @IBOutlet var timeRemainingLabel: UILabel!
     @IBOutlet var snapshotImageView: UIImageView?
     @IBOutlet var thumbnailStackXConstraint: NSLayoutConstraint!
-    @IBOutlet var lineView: UIView!
+    @IBOutlet var lineView: UIImageView!
     @IBOutlet var thumbnailContainer: UIVisualEffectView!
     @IBOutlet var fastForwardAndRewindLabel: UILabel!
     @IBOutlet var skipForwardIcon: UIView!
@@ -52,7 +52,7 @@ internal class ControlsOverlayViewController: UIViewController {
     
     @IBOutlet var snapshotImageHeightConstraint: NSLayoutConstraint!
     @IBOutlet var progressLineHeightConstraint: NSLayoutConstraint!
-    @IBOutlet var progressLineBottomConstraint: NSLayoutConstraint!
+    @IBOutlet var progressLineWidthConstraint: NSLayoutConstraint!
     
     @IBOutlet var horizontalMarginConstraints: [NSLayoutConstraint]!
     @IBOutlet var verticalMarginConstraints: [NSLayoutConstraint]!
@@ -73,6 +73,8 @@ internal class ControlsOverlayViewController: UIViewController {
         titleLabel.textColor = controlsCustomization.textColor
         subtitleLabel.font = controlsCustomization.subtitleFont
         subtitleLabel.textColor = controlsCustomization.textColor
+        lineView.image = UIImage(systemName: "circle.fill")
+        lineView.tintColor = UIColor(red: 0, green: CGFloat(163) / CGFloat(255), blue: CGFloat(224) / CGFloat(255), alpha: 1)
     }
     
     func setSnapshotViewsHidden(_ hidden:Bool, animated:Bool = false, completion:(() -> Void)? = nil) {
@@ -83,8 +85,8 @@ internal class ControlsOverlayViewController: UIViewController {
                 UIView.animate(withDuration: 0.3, delay: 0, options: UIView.AnimationOptions(), animations: {
                     defer { self.controlsOverlayView?.layoutIfNeeded() }
                     self.snapshotImageHeightConstraint.constant = 1
-                    self.progressLineBottomConstraint.constant = -6
-                    self.progressLineHeightConstraint.constant = 22
+                    self.progressLineHeightConstraint.constant = 30
+                    self.progressLineWidthConstraint.constant = 30
                     }, completion: { success in
                         guard success else { return }
                         self.thumbnailContainer.isHidden = true
@@ -99,8 +101,8 @@ internal class ControlsOverlayViewController: UIViewController {
                 UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
                     defer { self.controlsOverlayView?.layoutIfNeeded() }
                     self.snapshotImageHeightConstraint.constant = origHeightConstant
-                    self.progressLineBottomConstraint.constant = 0
-                    self.progressLineHeightConstraint.constant = 32
+                    self.progressLineHeightConstraint.constant = 30
+                    self.progressLineWidthConstraint.constant = 30
                     }, completion: { success in
                         guard success else { return }
                         completion?()
@@ -110,8 +112,8 @@ internal class ControlsOverlayViewController: UIViewController {
         else {
             let hideViews = hidden || delegate == nil
             self.thumbnailContainer.isHidden = hideViews
-            self.progressLineBottomConstraint.constant = hideViews ? -6 : 0
-            self.progressLineHeightConstraint.constant = hideViews ? 22 : 32
+            self.progressLineHeightConstraint.constant = 30
+            self.progressLineWidthConstraint.constant = 30
             completion?()
         }
     }

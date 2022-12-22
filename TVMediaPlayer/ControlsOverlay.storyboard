@@ -119,16 +119,16 @@
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X33-ZR-OWO" userLabel="Visual Effect View - Line">
-                                        <rect key="frame" x="1230" y="953" width="2" height="40"/>
-                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X33-ZR-OWO" userLabel="Visual Effect View - Line" customClass="UIImageView">
+                                        <rect key="frame" x="1211" y="962" width="40" height="40"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="0Ml-dZ-iTO"/>
-                                            <constraint firstAttribute="width" constant="2" id="Gaf-vu-aE3"/>
+                                            <constraint firstAttribute="width" constant="40" id="Gaf-vu-aE3"/>
                                         </constraints>
                                     </view>
                                     <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NeL-Zx-W97" userLabel="Visual Effect View - thumbnail container">
-                                        <rect key="frame" x="990" y="681" width="482" height="272"/>
+                                        <rect key="frame" x="990" y="690" width="482" height="272"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="Dcl-QI-Ej6">
                                             <rect key="frame" x="0.0" y="0.0" width="482" height="272"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -152,7 +152,7 @@
                                         <blurEffect style="light"/>
                                     </visualEffectView>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" text="&gt;&gt; 2x" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GYV-Tg-rv1" userLabel="Label - FF - Rewind">
-                                        <rect key="frame" x="1200.5" y="928" width="61" height="20"/>
+                                        <rect key="frame" x="1200.5" y="937" width="61" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="Y8l-Zh-p0q"/>
                                         </constraints>
@@ -240,7 +240,7 @@
                                     <constraint firstItem="NeL-Zx-W97" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="0Hi-Sq-ngu" secondAttribute="leading" id="wVE-y8-ARH"/>
                                     <constraint firstAttribute="trailing" secondItem="fCP-Gd-5dV" secondAttribute="trailing" id="xS0-of-FhI"/>
                                     <constraint firstItem="ATe-Va-qTi" firstAttribute="centerY" secondItem="Vnd-8y-0Ro" secondAttribute="centerY" id="xWp-ie-q6d"/>
-                                    <constraint firstItem="0Hi-Sq-ngu" firstAttribute="bottom" secondItem="X33-ZR-OWO" secondAttribute="bottom" constant="-6" id="xYO-Vw-e5l"/>
+                                    <constraint firstItem="0Hi-Sq-ngu" firstAttribute="centerY" secondItem="X33-ZR-OWO" secondAttribute="centerY" id="xYO-Vw-e5l"/>
                                     <constraint firstItem="NeL-Zx-W97" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="0Hi-Sq-ngu" secondAttribute="trailing" id="ykk-7T-bak"/>
                                     <constraint firstItem="Vnd-8y-0Ro" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="0Hi-Sq-ngu" secondAttribute="leading" id="z7t-rx-7qx"/>
                                     <constraint firstItem="nXV-RU-UW1" firstAttribute="top" secondItem="RUj-iX-3jP" secondAttribute="top" id="zOB-Dx-eed"/>
@@ -262,8 +262,8 @@
                         <outlet property="footerView" destination="fCP-Gd-5dV" id="i7X-nf-mZm"/>
                         <outlet property="headerView" destination="nXV-RU-UW1" id="F1M-Aj-DVq"/>
                         <outlet property="lineView" destination="X33-ZR-OWO" id="Xcr-RD-V0Q"/>
-                        <outlet property="progressLineBottomConstraint" destination="xYO-Vw-e5l" id="cKP-P8-CV4"/>
                         <outlet property="progressLineHeightConstraint" destination="0Ml-dZ-iTO" id="3zl-yy-DU6"/>
+                        <outlet property="progressLineWidthConstraint" destination="Gaf-vu-aE3" id="nU2-Ol-liu"/>
                         <outlet property="progressView" destination="0Hi-Sq-ngu" id="7hy-sY-3ao"/>
                         <outlet property="skipBackIcon" destination="gOK-g5-OR2" id="Bmd-tD-8Cb"/>
                         <outlet property="skipForwardIcon" destination="ATe-Va-qTi" id="DHc-jm-KHs"/>
