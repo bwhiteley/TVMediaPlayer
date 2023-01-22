@@ -119,7 +119,7 @@
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X33-ZR-OWO" userLabel="Visual Effect View - Line" customClass="UIImageView">
+                                    <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X33-ZR-OWO" userLabel="Visual Effect View - Line" customClass="ScrubberButton" customModule="TVMediaPlayer">
                                         <rect key="frame" x="1211" y="962" width="40" height="40"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>

@@ -1,5 +1,9 @@
 import UIKit
 
+protocol ControlsOverlayViewControllerDelegate: AnyObject {
+    func scrubberButtonTapped()
+}
+
 internal class ControlsOverlayViewController: UIViewController {
     
     class func viewControllerFromStoryboard(mediaItem:MediaItemType, controlsCustomization: ControlsOverlayCustomization) -> ControlsOverlayViewController {
@@ -19,7 +23,8 @@ internal class ControlsOverlayViewController: UIViewController {
         case touches
     }
     
-    internal weak var delegate: MediaPlayerThumbnailSnapshotDelegate?
+    internal weak var delegate: ControlsOverlayViewControllerDelegate?
+    internal weak var thumbnailDelegate: MediaPlayerThumbnailSnapshotDelegate?
     
     internal var wideMargins = true
     
@@ -44,7 +49,7 @@ internal class ControlsOverlayViewController: UIViewController {
     @IBOutlet var timeRemainingLabel: UILabel!
     @IBOutlet var snapshotImageView: UIImageView?
     @IBOutlet var thumbnailStackXConstraint: NSLayoutConstraint!
-    @IBOutlet var lineView: UIImageView!
+    @IBOutlet var lineView: ScrubberButton!
     @IBOutlet var thumbnailContainer: UIVisualEffectView!
     @IBOutlet var fastForwardAndRewindLabel: UILabel!
     @IBOutlet var skipForwardIcon: UIView!
@@ -63,6 +68,9 @@ internal class ControlsOverlayViewController: UIViewController {
     
     internal let headerCustomContentView = UIView()
     
+    private let progressViewFocusGuide = UIFocusGuide()
+    private let topFocusGuide = UIFocusGuide()
+    
     fileprivate var headerAndFooterElements:[UIView?] = []
     
     fileprivate var touching:Bool = false // This is used because `touchesEnded` is called before the last DPad state change.
@@ -73,12 +81,15 @@ internal class ControlsOverlayViewController: UIViewController {
         titleLabel.textColor = controlsCustomization.textColor
         subtitleLabel.font = controlsCustomization.subtitleFont
         subtitleLabel.textColor = controlsCustomization.textColor
-        lineView.image = UIImage(systemName: "circle.fill")
+        lineView.setImage(UIImage(systemName: "circle.fill"), for: .normal)
+        lineView.layer.cornerRadius = 20
+        lineView.layer.masksToBounds = true
+        lineView.imageEdgeInsets = .init(top: 8, left: 8, bottom: 8, right: 8)
         lineView.tintColor = UIColor(red: 0, green: CGFloat(163) / CGFloat(255), blue: CGFloat(224) / CGFloat(255), alpha: 1)
     }
     
     func setSnapshotViewsHidden(_ hidden:Bool, animated:Bool = false, completion:(() -> Void)? = nil) {
-        if animated && thumbnailContainer.isHidden != hidden && delegate != nil {
+        if animated && thumbnailContainer.isHidden != hidden && thumbnailDelegate != nil {
             let origHeightConstant = self.snapshotImageHeightConstraint.constant
             if hidden {
                 self.controlsOverlayView?.layoutIfNeeded()
@@ -110,7 +121,7 @@ internal class ControlsOverlayViewController: UIViewController {
             }
         }
         else {
-            let hideViews = hidden || delegate == nil
+            let hideViews = hidden || thumbnailDelegate == nil
             self.thumbnailContainer.isHidden = hideViews
             self.progressLineHeightConstraint.constant = 30
             self.progressLineWidthConstraint.constant = 30
@@ -168,6 +179,7 @@ internal class ControlsOverlayViewController: UIViewController {
                 fastForwardAndRewindLabel.isHidden = true
                 skipBackIcon.isHidden = true
                 skipForwardIcon.isHidden = true
+                controlsOverlayView.setNeedsFocusUpdate()
             case .fastForward, .rewind:
                 view.isHidden = false
                 setSnapshotViewsHidden(true, animated: false)
@@ -297,7 +309,7 @@ internal class ControlsOverlayViewController: UIViewController {
             guard let snapShotSize = snapshotImageView?.frame.size else { return }
             
             if case .pause = playerState {
-                delegate?.snapshotImageAtPosition(position, size:snapShotSize, handler: self)
+                thumbnailDelegate?.snapshotImageAtPosition(position, size:snapShotSize, handler: self)
             }
         }
     }
@@ -325,6 +337,7 @@ internal class ControlsOverlayViewController: UIViewController {
         
         position = 0
         adTimeRemainingLabel.text = nil
+        adTimeRemainingLabel.superview?.backgroundColor = .clear
         self.titleLabel.text = mediaItem?.title
         self.subtitleLabel.text = mediaItem?.subtitle
         
@@ -360,6 +373,7 @@ internal class ControlsOverlayViewController: UIViewController {
         adBreakContainer.frame = progressView.frame
         adBreakContainer.backgroundColor = .clear
         progressView.superview?.addSubview(adBreakContainer)
+        lineView.superview?.bringSubviewToFront(lineView)
         
         Task { @MainActor in
             do {
@@ -380,6 +394,35 @@ internal class ControlsOverlayViewController: UIViewController {
         headerCustomContentView.frame = headerView.bounds
         headerView.addSubview(headerCustomContentView)
         customizeUI()
+        
+        controlsOverlayView.addLayoutGuide(progressViewFocusGuide)
+        NSLayoutConstraint.activate([
+            progressViewFocusGuide.topAnchor.constraint(equalTo: progressView.topAnchor),
+            progressViewFocusGuide.bottomAnchor.constraint(equalTo: progressView.bottomAnchor),
+            progressViewFocusGuide.leadingAnchor.constraint(equalTo: progressView.leadingAnchor),
+            progressViewFocusGuide.trailingAnchor.constraint(equalTo: progressView.trailingAnchor),
+        ])
+        progressViewFocusGuide.preferredFocusEnvironments = [lineView]
+        
+        controlsOverlayView.addLayoutGuide(topFocusGuide)
+        NSLayoutConstraint.activate([
+            topFocusGuide.topAnchor.constraint(equalTo: headerCustomContentView.topAnchor),
+            topFocusGuide.bottomAnchor.constraint(equalTo: headerCustomContentView.bottomAnchor),
+            topFocusGuide.leadingAnchor.constraint(equalTo: progressView.leadingAnchor),
+            topFocusGuide.trailingAnchor.constraint(equalTo: progressView.trailingAnchor),
+        ])
+        topFocusGuide.preferredFocusEnvironments = [headerCustomContentView]
+        
+        lineView.addTarget(self, action: #selector(scrubberButtonTapped(_:)), for: .primaryActionTriggered)
+        
+    }
+    
+    override var preferredFocusEnvironments: [UIFocusEnvironment] {
+        [lineView]
+    }
+    
+    @objc private func scrubberButtonTapped(_ sender: ScrubberButton) {
+        delegate?.scrubberButtonTapped()
     }
     
     func flashTimeBar() {

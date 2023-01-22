@@ -31,6 +31,7 @@ open class MediaPlayerViewController: UIViewController {
         self.mediaPlayer = mediaPlayer
         self.controls = ControlsOverlayViewController.viewControllerFromStoryboard(mediaItem: mediaPlayer.item, controlsCustomization: controlsCustomization)
         super.init(nibName: nil, bundle: nil)
+        self.controls.delegate = self
         self.mediaPlayer.positionChanged = { [weak self] newPosition in
             self?.mediaPlayerPositionChanged(newPosition)
         }
@@ -64,10 +65,10 @@ open class MediaPlayerViewController: UIViewController {
     
     open var thumbnailDelegate:MediaPlayerThumbnailSnapshotDelegate? {
         get {
-            return controls.delegate
+            return controls.thumbnailDelegate
         }
         set {
-            controls.delegate = newValue
+            controls.thumbnailDelegate = newValue
         }
     }
     
@@ -401,6 +402,12 @@ open class MediaPlayerViewController: UIViewController {
         }
     }
     
+}
+
+extension MediaPlayerViewController: ControlsOverlayViewControllerDelegate {
+    func scrubberButtonTapped() {
+        selectPressed()
+    }
 }
 
 extension MediaPlayerViewController {
