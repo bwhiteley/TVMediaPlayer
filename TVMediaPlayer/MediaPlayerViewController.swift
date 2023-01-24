@@ -314,24 +314,28 @@ open class MediaPlayerViewController: UIViewController {
     }
     
     fileprivate func upArrowPressed() {
+        if mediaPlayer.isPlayingAd { return }
         //guard !didTapEventComeFromDPad() else { return }
         guard case .standardPlay = playerState else { return }
         longJumpAhead()
     }
     
     fileprivate func downArrowPressed() {
+        if mediaPlayer.isPlayingAd { return }
         //guard !didTapEventComeFromDPad() else { return }
         guard case .standardPlay = playerState else { return }
         longJumpBack()
     }
 
     fileprivate func leftArrowPressed() {
+        if mediaPlayer.isPlayingAd { return }
         //guard !didTapEventComeFromDPad() else { return }
         guard case .standardPlay = playerState else { return }
         shortJumpBack()
     }
     
     fileprivate func rightArrowPressed() {
+        if mediaPlayer.isPlayingAd { return }
         //guard !didTapEventComeFromDPad() else { return }
         guard case .standardPlay = playerState else { return }
         shortJumpAhead()
@@ -392,7 +396,8 @@ open class MediaPlayerViewController: UIViewController {
             let length = mediaPlayer.item.length
             if !position.isNaN, !position.isInfinite, !length.isNaN, !length.isInfinite {
                 
-            controls.adTimeRemainingLabel.attributedText = controls.controlsCustomization.adSecondsRemainingString(Int( length - position * length))
+            let secondsRemaining = max(Int( length - position * length), 0)
+            controls.adTimeRemainingLabel.attributedText = controls.controlsCustomization.adSecondsRemainingString(secondsRemaining)
             } else {
                 controls.adTimeRemainingLabel.attributedText = nil
             }
