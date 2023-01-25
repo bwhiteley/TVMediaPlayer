@@ -88,6 +88,7 @@ internal class ControlsOverlayViewController: UIViewController {
         lineView.tintColor = UIColor(red: 0, green: CGFloat(163) / CGFloat(255), blue: CGFloat(224) / CGFloat(255), alpha: 1)
     }
     
+    
     func setSnapshotViewsHidden(_ hidden:Bool, animated:Bool = false, completion:(() -> Void)? = nil) {
         if animated && thumbnailContainer.isHidden != hidden && thumbnailDelegate != nil {
             let origHeightConstant = self.snapshotImageHeightConstraint.constant
@@ -151,12 +152,14 @@ internal class ControlsOverlayViewController: UIViewController {
                     self.headerAndFooterElements.forEach { $0?.alpha = 1 }
                 }, completion: { _ in
                     completion?()
+                    self.setNeedsFocusUpdate()
                 })
             }
         }
         else {
             self.headerAndFooterElements.forEach { $0?.isHidden = hidden }
             completion?()
+            self.setNeedsFocusUpdate()
         }
     }
     

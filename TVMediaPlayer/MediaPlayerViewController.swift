@@ -74,16 +74,16 @@ open class MediaPlayerViewController: UIViewController {
     
     open var dismiss:((_ position:Double) -> Void)?
     
-    fileprivate lazy var swipeLeftGestureRecognizer:UISwipeGestureRecognizer = {
-        let gr = UISwipeGestureRecognizer(target: self, action: #selector(swipedLeft(_:)))
-        gr.direction = .left
-        return gr
-    }()
-    fileprivate lazy var swipeRightGestureRecognizer:UISwipeGestureRecognizer = {
-        let gr = UISwipeGestureRecognizer(target: self, action: #selector(swipedRight(_:)))
-        gr.direction = .right
-        return gr
-    }()
+//    fileprivate lazy var swipeLeftGestureRecognizer:UISwipeGestureRecognizer = {
+//        let gr = UISwipeGestureRecognizer(target: self, action: #selector(swipedLeft(_:)))
+//        gr.direction = .left
+//        return gr
+//    }()
+//    fileprivate lazy var swipeRightGestureRecognizer:UISwipeGestureRecognizer = {
+//        let gr = UISwipeGestureRecognizer(target: self, action: #selector(swipedRight(_:)))
+//        gr.direction = .right
+//        return gr
+//    }()
     fileprivate lazy var swipeUpGestureRecognizer:UISwipeGestureRecognizer = {
         let gr = UISwipeGestureRecognizer(target: self, action: #selector(swipedUp(_:)))
         gr.direction = .up
@@ -133,17 +133,19 @@ open class MediaPlayerViewController: UIViewController {
     
     open func play() {
         panGestureRecognizer.isEnabled = false
-        swipeRightGestureRecognizer.isEnabled = true
-        swipeLeftGestureRecognizer.isEnabled = true
+//        swipeRightGestureRecognizer.isEnabled = true
+//        swipeLeftGestureRecognizer.isEnabled = true
         mediaPlayer.play()
         mediaPlayer.rate = 1
     }
     
     open func pause() {
-        panGestureRecognizer.isEnabled = true
-        swipeRightGestureRecognizer.isEnabled = false
-        swipeLeftGestureRecognizer.isEnabled = false
-        controls.position = mediaPlayer.position
+//        swipeRightGestureRecognizer.isEnabled = false
+//        swipeLeftGestureRecognizer.isEnabled = false
+        if !mediaPlayer.isPlayingAd {
+            controls.position = mediaPlayer.position
+            panGestureRecognizer.isEnabled = true
+        }
         mediaPlayer.pause()
     }
     
@@ -185,14 +187,14 @@ open class MediaPlayerViewController: UIViewController {
     }
     
     fileprivate func setupButtons() {
-        self.view.addGestureRecognizer(swipeRightGestureRecognizer)
-        self.view.addGestureRecognizer(swipeLeftGestureRecognizer)
+//        self.view.addGestureRecognizer(swipeRightGestureRecognizer)
+//        self.view.addGestureRecognizer(swipeLeftGestureRecognizer)
+//        panGestureRecognizer.require(toFail: swipeLeftGestureRecognizer)
+//        panGestureRecognizer.require(toFail: swipeRightGestureRecognizer)
+        
         self.view.addGestureRecognizer(swipeDownGestureRecognizer)
         self.view.addGestureRecognizer(swipeUpGestureRecognizer)
-    
-        panGestureRecognizer.require(toFail: swipeLeftGestureRecognizer)
-        panGestureRecognizer.require(toFail: swipeRightGestureRecognizer)
-        
+   
         self.view.addGestureRecognizer(panGestureRecognizer)
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(menuPressed(_:)))
@@ -252,7 +254,6 @@ open class MediaPlayerViewController: UIViewController {
     
     private func dismissCaptionView() {
         guard let captionView = self.captionView else { return }
-        self.captionView = nil
         UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn], animations: { [weak self] in
             guard let height = self?.captionViewHeight else { return }
             self?.view.setNeedsLayout()
