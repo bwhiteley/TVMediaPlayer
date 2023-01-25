@@ -233,6 +233,7 @@ open class MediaPlayerViewController: UIViewController {
 
     private let captionViewHeight:CGFloat = 245
     private func showCaptionView() {
+        if self.captionView != nil { return }
         let captionView = CaptionView(frame: .init(x: 0, y: -captionViewHeight, width: view.frame.width, height: captionViewHeight))
         view.addSubview(captionView)
         captionView.configure(labels: mediaPlayer.textTracks, selected: mediaPlayer.activeTextTrack) { [weak self] newTrack in
