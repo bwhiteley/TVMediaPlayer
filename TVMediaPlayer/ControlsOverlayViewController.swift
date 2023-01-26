@@ -82,7 +82,7 @@ internal class ControlsOverlayViewController: UIViewController {
         subtitleLabel.font = controlsCustomization.subtitleFont
         subtitleLabel.textColor = controlsCustomization.textColor
         lineView.setImage(UIImage(systemName: "circle.fill"), for: .normal)
-        lineView.layer.cornerRadius = 20
+        lineView.layer.cornerRadius = 15
         lineView.layer.masksToBounds = true
         lineView.imageEdgeInsets = .init(top: 8, left: 8, bottom: 8, right: 8)
         lineView.tintColor = UIColor(red: 0, green: CGFloat(163) / CGFloat(255), blue: CGFloat(224) / CGFloat(255), alpha: 1)
