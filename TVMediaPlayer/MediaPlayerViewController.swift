@@ -316,17 +316,12 @@ open class MediaPlayerViewController: UIViewController {
     }
     
     fileprivate func upArrowPressed() {
-        if mediaPlayer.isPlayingAd { return }
-        //guard !didTapEventComeFromDPad() else { return }
-        guard case .standardPlay = playerState else { return }
-        longJumpAhead()
+        showCaptionView()
     }
     
     fileprivate func downArrowPressed() {
-        if mediaPlayer.isPlayingAd { return }
-        //guard !didTapEventComeFromDPad() else { return }
-        guard case .standardPlay = playerState else { return }
-        longJumpBack()
+        if captionView == nil { return }
+        dismissCaptionView()
     }
 
     fileprivate func leftArrowPressed() {
