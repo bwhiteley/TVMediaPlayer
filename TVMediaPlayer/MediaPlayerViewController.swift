@@ -249,7 +249,16 @@ open class MediaPlayerViewController: UIViewController {
             self?.view.setNeedsLayout()
             captionView.frame.origin.y = 0
             self?.view.setNeedsLayout()
+            self?.setNeedsFocusUpdate()
+            self?.updateFocusIfNeeded()
         }
+    }
+    
+    open override var preferredFocusEnvironments: [UIFocusEnvironment] {
+        if let captionView = self.captionView {
+            return [captionView]
+        }
+        return super.preferredFocusEnvironments
     }
     
     private func dismissCaptionView() {
