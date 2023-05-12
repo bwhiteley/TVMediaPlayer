@@ -399,15 +399,16 @@ open class MediaPlayerViewController: UIViewController {
     
     fileprivate func mediaPlayerPositionChanged(_ position:Double) {
         if mediaPlayer.isPlayingAd {
+            controls.adTimeRemainingLabel.isHidden = false
             let length = mediaPlayer.item.length
             if !position.isNaN, !position.isInfinite, !length.isNaN, !length.isInfinite {
-                
-            let secondsRemaining = max(Int( length - position * length), 0)
-            controls.adTimeRemainingLabel.attributedText = controls.controlsCustomization.adSecondsRemainingString(secondsRemaining)
+                let secondsRemaining = max(Int( length - position * length), 0)
+                controls.adTimeRemainingLabel.attributedText = controls.controlsCustomization.adSecondsRemainingString(secondsRemaining)
             } else {
                 controls.adTimeRemainingLabel.attributedText = nil
             }
         } else {
+            controls.adTimeRemainingLabel.isHidden = true
             controls.adTimeRemainingLabel.attributedText = nil
             controls.position = position
         }

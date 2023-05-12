@@ -169,14 +169,14 @@ internal class ControlsOverlayViewController: UIViewController {
             case .hidden:
                 setSnapshotViewsHidden(true, animated: true) {
                     self.setHeaderAndFooterElementsHidden(true, animated: true) {
-                        self.view.isHidden = true
+                        self.controlsOverlayView.isHidden = true
                     }
                 }
                 fastForwardAndRewindLabel.isHidden = true
                 skipBackIcon.isHidden = true
                 skipForwardIcon.isHidden = true
             case .snapshot:
-                self.view.isHidden = false
+                self.controlsOverlayView.isHidden = false
                 setHeaderAndFooterElementsHidden(false, animated: true)
                 setSnapshotViewsHidden(false, animated: true)
                 fastForwardAndRewindLabel.isHidden = true
@@ -184,26 +184,26 @@ internal class ControlsOverlayViewController: UIViewController {
                 skipForwardIcon.isHidden = true
                 controlsOverlayView.setNeedsFocusUpdate()
             case .fastForward, .rewind:
-                view.isHidden = false
+                controlsOverlayView.isHidden = false
                 setSnapshotViewsHidden(true, animated: false)
                 fastForwardAndRewindLabel.isHidden = false
                 skipBackIcon.isHidden = true
                 skipForwardIcon.isHidden = true
             case .skipBack:
-                view.isHidden = false
+                controlsOverlayView.isHidden = false
                 setSnapshotViewsHidden(true, animated: false)
                 fastForwardAndRewindLabel.isHidden = true
                 skipBackIcon.isHidden = false
                 skipForwardIcon.isHidden = true
             case .skipForward:
-                view.isHidden = false
+                controlsOverlayView.isHidden = false
                 setSnapshotViewsHidden(true, animated: false)
                 fastForwardAndRewindLabel.isHidden = true
                 skipBackIcon.isHidden = true
                 skipForwardIcon.isHidden = false
                 timeRemainingLabel.isHidden = determineTimeRemainingLabelHidden()
             case .touches:
-                view.isHidden = false
+                controlsOverlayView.isHidden = false
                 setHeaderAndFooterElementsHidden(false, animated: true)
                 setSnapshotViewsHidden(true, animated: false)
                 fastForwardAndRewindLabel.isHidden = true
@@ -333,7 +333,7 @@ internal class ControlsOverlayViewController: UIViewController {
         return progressView.isHidden || (framesIntersect && !skipForwardIcon.isHidden)
     }
     
-    @IBOutlet var controlsOverlayView: UIView!
+    @IBOutlet private var controlsOverlayView: UIView!
     
     override internal func viewDidLoad() {
         super.viewDidLoad()
