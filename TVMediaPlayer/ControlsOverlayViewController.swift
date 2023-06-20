@@ -229,6 +229,16 @@ internal class ControlsOverlayViewController: UIViewController {
         }
     }
     
+    override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        touchesBegan()
+        super.touchesBegan(touches, with: event)
+    }
+    
+    override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        touchesEnded()
+        super.touchesEnded(touches, with: event)
+    }
+    
     func touchesBegan() {
         touching = true
         if controlsState == .hidden {
@@ -236,10 +246,19 @@ internal class ControlsOverlayViewController: UIViewController {
         }
     }
     
+    private var lastTouchDate: Date?
     func touchesEnded() {
         touching = false
         switch controlsState {
-        case .touches, .skipForward, .skipBack:
+        case .touches:
+            lastTouchDate = Date()
+            let capturedLastTouchDate = lastTouchDate
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                if !self.touching && self.lastTouchDate == capturedLastTouchDate {
+                    self.controlsState = .hidden
+                }
+            }
+        case .skipForward, .skipBack:
             controlsState = .hidden
         default:
             break
