@@ -102,14 +102,14 @@ open class MediaPlayerViewController: UIViewController {
             controls.playerState = playerState
             switch playerState {
             case .standardPlay:
-                play()
+                _play()
             case let .rewind(rate):
                 mediaPlayer.rate = -rate
             case let .fastforward(rate):
                 mediaPlayer.rate = rate
                 controls.position = mediaPlayer.position
             case .pause:
-                pause()
+                _pause()
             }
         }
     }
@@ -125,7 +125,15 @@ open class MediaPlayerViewController: UIViewController {
         playerState = .standardPlay
     }
     
-    open func play() {
+    public func play() {
+        playerState = .standardPlay
+    }
+    
+    public func pause() {
+        playerState = .pause
+    }
+    
+    private func _play() {
         panGestureRecognizer.isEnabled = false
 //        swipeRightGestureRecognizer.isEnabled = true
 //        swipeLeftGestureRecognizer.isEnabled = true
@@ -133,7 +141,7 @@ open class MediaPlayerViewController: UIViewController {
         mediaPlayer.rate = 1
     }
     
-    open func pause() {
+    private func _pause() {
 //        swipeRightGestureRecognizer.isEnabled = false
 //        swipeLeftGestureRecognizer.isEnabled = false
         if !mediaPlayer.isPlayingAd {
@@ -194,7 +202,7 @@ open class MediaPlayerViewController: UIViewController {
     }
     
     @objc internal func menuPressed(_ gr:UITapGestureRecognizer) {
-        mediaPlayer.pause()
+        pause()
         if let dismiss = dismiss {
             dismiss(mediaPlayer.position)
         }
