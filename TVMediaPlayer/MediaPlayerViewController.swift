@@ -84,16 +84,6 @@ open class MediaPlayerViewController: UIViewController {
 //        gr.direction = .right
 //        return gr
 //    }()
-    fileprivate lazy var swipeUpGestureRecognizer:UISwipeGestureRecognizer = {
-        let gr = UISwipeGestureRecognizer(target: self, action: #selector(swipedUp(_:)))
-        gr.direction = .up
-        return gr
-    }()
-    fileprivate lazy var swipeDownGestureRecognizer:UISwipeGestureRecognizer = {
-        let gr = UISwipeGestureRecognizer(target: self, action: #selector(swipedDown(_:)))
-        gr.direction = .down
-        return gr
-    }()
     fileprivate lazy var panGestureRecognizer:UIPanGestureRecognizer = {
         let pan = UIPanGestureRecognizer(target: self, action: #selector(panning(_:)))
         pan.isEnabled = false
@@ -129,6 +119,10 @@ open class MediaPlayerViewController: UIViewController {
         didSet {
             touchesEndedTimestamp = Date()
         }
+    }
+    
+    public func resumePlaying() {
+        playerState = .standardPlay
     }
     
     open func play() {
@@ -192,9 +186,6 @@ open class MediaPlayerViewController: UIViewController {
 //        panGestureRecognizer.require(toFail: swipeLeftGestureRecognizer)
 //        panGestureRecognizer.require(toFail: swipeRightGestureRecognizer)
         
-        self.view.addGestureRecognizer(swipeDownGestureRecognizer)
-        self.view.addGestureRecognizer(swipeUpGestureRecognizer)
-   
         self.view.addGestureRecognizer(panGestureRecognizer)
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(menuPressed(_:)))
@@ -215,7 +206,6 @@ open class MediaPlayerViewController: UIViewController {
     fileprivate var initialPanningPosition:Double = 0
 
     @objc func panning(_ gesture:UIPanGestureRecognizer) {
-        
         let point = gesture.translation(in: gesture.view)
         
         if case .began = gesture.state {
@@ -224,33 +214,10 @@ open class MediaPlayerViewController: UIViewController {
         
         let delta = panAdjustmentValue * point.x / self.view.frame.width
         let newProgress = initialPanningPosition + delta
-        controls.position = newProgress
-        
-    }
-    
-    @objc func swipedUp(_ gesture:UISwipeGestureRecognizer) {
-        if captionView == nil { return }
-        dismissCaptionView()
-    }
-
-    private let captionViewHeight:CGFloat = 245
-    private func showCaptionView() {
-        if self.captionView != nil { return }
-        let captionView = CaptionView(frame: .init(x: 0, y: -captionViewHeight, width: view.frame.width, height: captionViewHeight))
-        view.addSubview(captionView)
-        captionView.configure(labels: mediaPlayer.textTracks, selected: mediaPlayer.activeTextTrack) { [weak self] newTrack in
-            self?.mediaPlayer.activeTextTrack = newTrack
-        }
-        captionView.dismissHandler = { [weak self] in
-            self?.dismissCaptionView()
-        }
-        self.captionView = captionView
-        UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseOut]) { [weak self] in
-            self?.view.setNeedsLayout()
-            captionView.frame.origin.y = 0
-            self?.view.setNeedsLayout()
-            self?.setNeedsFocusUpdate()
-            self?.updateFocusIfNeeded()
+        if controls.lineView.isFocused {
+            controls.position = newProgress
+        } else {
+            controls.position = initialPanningPosition
         }
     }
     
@@ -259,22 +226,6 @@ open class MediaPlayerViewController: UIViewController {
             return [captionView]
         }
         return super.preferredFocusEnvironments
-    }
-    
-    private func dismissCaptionView() {
-        guard let captionView = self.captionView else { return }
-        UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn], animations: { [weak self] in
-            guard let height = self?.captionViewHeight else { return }
-            self?.view.setNeedsLayout()
-            captionView.frame.origin.y = -height
-            self?.view.setNeedsLayout()
-        }, completion: { _ in
-            captionView.removeFromSuperview()
-        })
-    }
-    
-    @objc func swipedDown(_ gesture:UISwipeGestureRecognizer) {
-        showCaptionView()
     }
     
     @objc func swipedLeft(_ gesture:UISwipeGestureRecognizer) {
@@ -324,15 +275,6 @@ open class MediaPlayerViewController: UIViewController {
         return interval < 0.1
     }
     
-    fileprivate func upArrowPressed() {
-        showCaptionView()
-    }
-    
-    fileprivate func downArrowPressed() {
-        if captionView == nil { return }
-        dismissCaptionView()
-    }
-
     fileprivate func leftArrowPressed() {
         if mediaPlayer.isPlayingAd { return }
         //guard !didTapEventComeFromDPad() else { return }
@@ -431,10 +373,6 @@ extension MediaPlayerViewController {
                 self.playPressed()
             case .select:
                 self.selectPressed()
-            case .upArrow:
-                self.upArrowPressed()
-            case .downArrow:
-                self.downArrowPressed()
             case .leftArrow:
                 self.leftArrowPressed()
             case .rightArrow:
