@@ -371,8 +371,8 @@ extension MediaPlayerViewController {
             switch item.type {
             case .playPause:
                 self.playPressed()
-            case .select:
-                self.selectPressed()
+//            case .select:
+//                self.selectPressed()
             case .leftArrow:
                 self.leftArrowPressed()
             case .rightArrow:
