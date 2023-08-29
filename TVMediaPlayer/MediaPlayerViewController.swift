@@ -114,6 +114,12 @@ open class MediaPlayerViewController: UIViewController {
         }
     }
     
+    // A subclass or container can call this to indicate the user interacted with the
+    // remote to reset the timer for hiding the controls.
+    public func userInteractionOccurred() {
+        controls.userInteractionOccurred()
+    }
+    
     fileprivate var touchesEndedTimestamp:Date? // used to distinguish universal remote arrow buttons from touchpad taps.
     fileprivate var touching:Bool = false {
         didSet {

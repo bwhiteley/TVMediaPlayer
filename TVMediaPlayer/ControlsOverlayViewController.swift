@@ -229,6 +229,13 @@ internal class ControlsOverlayViewController: UIViewController {
         }
     }
     
+    func userInteractionOccurred() {
+        touchTimer?.invalidate()
+        touchTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: false, block: { [weak self] timer in
+            self?.controlsState = .hidden
+        })
+    }
+    
     override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         touchesBegan()
         super.touchesBegan(touches, with: event)
@@ -241,23 +248,21 @@ internal class ControlsOverlayViewController: UIViewController {
     
     func touchesBegan() {
         touching = true
+        touchTimer?.invalidate()
         if controlsState == .hidden {
             controlsState = .touches
         }
     }
     
-    private var lastTouchDate: Date?
+    private var touchTimer: Timer?
     func touchesEnded() {
         touching = false
         switch controlsState {
         case .touches:
-            lastTouchDate = Date()
-            let capturedLastTouchDate = lastTouchDate
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                if !self.touching && self.lastTouchDate == capturedLastTouchDate {
-                    self.controlsState = .hidden
-                }
-            }
+            touchTimer?.invalidate()
+            touchTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: false, block: { [weak self] timer in
+                self?.controlsState = .hidden
+            })
         case .skipForward, .skipBack:
             controlsState = .hidden
         default:
