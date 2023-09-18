@@ -7,7 +7,7 @@ enum PlayerState {
     
     func nextFasterState() -> PlayerState? {
         switch self {
-        case .standardPlay:
+        case .standardPlay, .pause:
             guard let newRate = PlayerState.fastforwardRates.first else {
                 return nil
             }
@@ -24,8 +24,6 @@ enum PlayerState {
             if let index = PlayerState.rewindRates.firstIndex(of: rate) , index > 0 {
                 return .rewind(rate: PlayerState.rewindRates[index - 1])
             }
-            return nil
-        default:
             return nil
         }
     }
@@ -55,8 +53,8 @@ enum PlayerState {
         }
     }
     
-    fileprivate static let rewindRates:[Double] = [2, 4, 8, 16]
-    fileprivate static let fastforwardRates:[Double] = [1.3, 2, 4, 6]
+    fileprivate static let rewindRates:[Double] = [2, 3, 4]
+    fileprivate static let fastforwardRates:[Double] = [2, 3, 4]
 }
 
 //

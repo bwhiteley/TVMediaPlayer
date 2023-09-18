@@ -27,6 +27,11 @@ public protocol MediaPlayerThumbnailSnapshotDelegate: NSObjectProtocol {
 
 open class MediaPlayerViewController: UIViewController {
     
+    private let leftTapGestureRecognizer = UITapGestureRecognizer()
+    private let leftLongPressGestureRecognizer = UILongPressGestureRecognizer()
+    private let rightTapGestureRecognizer = UITapGestureRecognizer()
+    private let rightLongPressGestureRecognizer = UILongPressGestureRecognizer()
+    
     public init(mediaPlayer:MediaPlayerType, controlsCustomization: ControlsOverlayCustomization = .default) {
         self.mediaPlayer = mediaPlayer
         self.controls = ControlsOverlayViewController.viewControllerFromStoryboard(mediaItem: mediaPlayer.item, controlsCustomization: controlsCustomization)
@@ -57,8 +62,6 @@ open class MediaPlayerViewController: UIViewController {
 
     fileprivate let panAdjustmentValue:Double = 0.3
     
-    private weak var captionView: CaptionView?
-    
     open var mediaPlayer:MediaPlayerType
     
     open var wideMargins:Bool = true
@@ -74,16 +77,6 @@ open class MediaPlayerViewController: UIViewController {
     
     open var dismiss:((_ position:Double) -> Void)?
     
-//    fileprivate lazy var swipeLeftGestureRecognizer:UISwipeGestureRecognizer = {
-//        let gr = UISwipeGestureRecognizer(target: self, action: #selector(swipedLeft(_:)))
-//        gr.direction = .left
-//        return gr
-//    }()
-//    fileprivate lazy var swipeRightGestureRecognizer:UISwipeGestureRecognizer = {
-//        let gr = UISwipeGestureRecognizer(target: self, action: #selector(swipedRight(_:)))
-//        gr.direction = .right
-//        return gr
-//    }()
     fileprivate lazy var panGestureRecognizer:UIPanGestureRecognizer = {
         let pan = UIPanGestureRecognizer(target: self, action: #selector(panning(_:)))
         pan.isEnabled = false
@@ -141,15 +134,11 @@ open class MediaPlayerViewController: UIViewController {
     
     private func _play() {
         panGestureRecognizer.isEnabled = false
-//        swipeRightGestureRecognizer.isEnabled = true
-//        swipeLeftGestureRecognizer.isEnabled = true
         mediaPlayer.play()
         mediaPlayer.rate = 1
     }
     
     private func _pause() {
-//        swipeRightGestureRecognizer.isEnabled = false
-//        swipeLeftGestureRecognizer.isEnabled = false
         if !mediaPlayer.isPlayingAd {
             controls.position = mediaPlayer.position
             panGestureRecognizer.isEnabled = true
@@ -192,22 +181,117 @@ open class MediaPlayerViewController: UIViewController {
         self.addChild(controls)
         view.addSubview(controls.view)
         controls.didMove(toParent: self)
+        addTapRecognizers()
+    }
+    
+    private func addTapRecognizers() {
+        leftTapGestureRecognizer.addTarget(self, action: #selector(self.leftButtonTapped))
+        leftTapGestureRecognizer.allowedPressTypes = [
+            NSNumber(value: UIPress.PressType.leftArrow.rawValue),
+            NSNumber(value: UIPress.PressType.keyboardLeftArrow.rawValue),
+        ]
+        leftTapGestureRecognizer.isEnabled = true
+        self.view.addGestureRecognizer(leftTapGestureRecognizer)
+        
+        rightTapGestureRecognizer.addTarget(self, action: #selector(self.rightButtonTapped))
+        rightTapGestureRecognizer.allowedPressTypes = [
+            NSNumber(value: UIPress.PressType.rightArrow.rawValue),
+            NSNumber(value: UIPress.PressType.keyboardRightArrow.rawValue),
+        ]
+        rightTapGestureRecognizer.isEnabled = true
+        self.view.addGestureRecognizer(rightTapGestureRecognizer)
+        
+        leftLongPressGestureRecognizer.addTarget(self, action: #selector(self.leftButtonLongPress))
+        leftLongPressGestureRecognizer.allowedPressTypes = [
+            NSNumber(value: UIPress.PressType.leftArrow.rawValue),
+            NSNumber(value: UIPress.PressType.keyboardLeftArrow.rawValue),
+        ]
+        leftLongPressGestureRecognizer.isEnabled = true
+        self.view.addGestureRecognizer(leftLongPressGestureRecognizer)
+        
+        rightLongPressGestureRecognizer.addTarget(self, action: #selector(self.rightButtonLongPress))
+        rightLongPressGestureRecognizer.allowedPressTypes = [
+            NSNumber(value: UIPress.PressType.rightArrow.rawValue),
+            NSNumber(value: UIPress.PressType.keyboardRightArrow.rawValue),
+        ]
+        rightLongPressGestureRecognizer.isEnabled = true
+        self.view.addGestureRecognizer(rightLongPressGestureRecognizer)
+        
+        let menuTap = UITapGestureRecognizer(target: self, action: #selector(menuPressed))
+        menuTap.allowedPressTypes = [
+            NSNumber(value: UIPress.PressType.menu.rawValue as Int),
+            NSNumber(value: UIPress.PressType.keyboardEsc.rawValue as Int),
+        ]
+        self.view.addGestureRecognizer(menuTap)
+        
+        let playTap = UITapGestureRecognizer(target: self, action: #selector(playPressed))
+        playTap.allowedPressTypes = [
+            NSNumber(value: UIPress.PressType.playPause.rawValue as Int),
+            NSNumber(value: UIPress.PressType.keyboardSpace.rawValue as Int),
+        ]
+        self.view.addGestureRecognizer(playTap)
+    }
+    
+    @objc private func rightButtonTapped() {
+        if mediaPlayer.isPlayingAd { return }
+        switch playerState {
+        case .standardPlay, .pause:
+            shortJumpAhead()
+        case .fastforward, .rewind:
+            if let next = playerState.nextFasterState() {
+                playerState = next
+            }
+        }
+        //guard !didTapEventComeFromDPad() else { return }
+    }
+
+    @objc private func leftButtonTapped() {
+        print("** left click")
+        if mediaPlayer.isPlayingAd { return }
+        switch playerState {
+        case .standardPlay, .pause:
+            shortJumpBack()
+        case .fastforward, .rewind:
+            if let next = playerState.nextSlowerState() {
+                playerState = next
+            }
+        }
+        //guard !didTapEventComeFromDPad() else { return }
+    }
+    
+    @objc private func rightButtonLongPress() {
+        print("** right long press")
+        if mediaPlayer.isPlayingAd { return }
+        switch playerState {
+        case .standardPlay, .pause:
+            if let next = playerState.nextFasterState() {
+                playerState = next
+            }
+        default:
+            break
+        }
+    }
+    
+    @objc private func leftButtonLongPress() {
+        print("** left long press")
+        if mediaPlayer.isPlayingAd { return }
+        switch playerState {
+        case .standardPlay, .pause:
+            if let next = playerState.nextSlowerState() {
+                playerState = next
+            }
+        default:
+            break
+        }
     }
     
     fileprivate func setupButtons() {
-//        self.view.addGestureRecognizer(swipeRightGestureRecognizer)
-//        self.view.addGestureRecognizer(swipeLeftGestureRecognizer)
-//        panGestureRecognizer.require(toFail: swipeLeftGestureRecognizer)
-//        panGestureRecognizer.require(toFail: swipeRightGestureRecognizer)
         
         self.view.addGestureRecognizer(panGestureRecognizer)
 
-        let tap = UITapGestureRecognizer(target: self, action: #selector(menuPressed(_:)))
-        tap.allowedPressTypes = [NSNumber(value: UIPress.PressType.menu.rawValue as Int)]
-        self.view.addGestureRecognizer(tap)
     }
     
-    @objc internal func menuPressed(_ gr:UITapGestureRecognizer) {
+    @objc private func menuPressed() {
         pause()
         if let dismiss = dismiss {
             dismiss(mediaPlayer.position)
@@ -233,25 +317,6 @@ open class MediaPlayerViewController: UIViewController {
         } else {
             controls.position = initialPanningPosition
         }
-    }
-    
-    open override var preferredFocusEnvironments: [UIFocusEnvironment] {
-        if let captionView = self.captionView {
-            return [captionView]
-        }
-        return super.preferredFocusEnvironments
-    }
-    
-    @objc func swipedLeft(_ gesture:UISwipeGestureRecognizer) {
-        guard let newState = playerState.nextSlowerState() else { return }
-        guard captionView == nil else { return }
-        playerState = newState
-    }
-    
-    @objc func swipedRight(_ gesture:UISwipeGestureRecognizer) {
-        guard let newState = playerState.nextFasterState() else { return }
-        guard captionView == nil else { return }
-        playerState = newState
     }
     
     func shortJumpAhead() {
@@ -289,20 +354,6 @@ open class MediaPlayerViewController: UIViewController {
         return interval < 0.1
     }
     
-    fileprivate func leftArrowPressed() {
-        if mediaPlayer.isPlayingAd { return }
-        //guard !didTapEventComeFromDPad() else { return }
-        guard case .standardPlay = playerState else { return }
-        shortJumpBack()
-    }
-    
-    fileprivate func rightArrowPressed() {
-        if mediaPlayer.isPlayingAd { return }
-        //guard !didTapEventComeFromDPad() else { return }
-        guard case .standardPlay = playerState else { return }
-        shortJumpAhead()
-    }
-    
     public static func newPositionByAdjustingPosition(_ position:Double, bySeconds seconds:Double, length:TimeInterval) -> Double {
         let delta = seconds / length
         var newPosition = position + delta
@@ -338,7 +389,7 @@ open class MediaPlayerViewController: UIViewController {
         }
     }
 
-    fileprivate func playPressed() {
+    @objc fileprivate func playPressed() {
         let state = playerState
         switch state {
         case .pause:
@@ -381,16 +432,8 @@ extension MediaPlayerViewController: ControlsOverlayViewControllerDelegate {
 extension MediaPlayerViewController {
     override open func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         for item in presses {
-            //NSLog("presses began for type: %d", item.type.rawValue)
+            //NSLog("***** presses began for type: %d", item.type.rawValue)
             switch item.type {
-            case .playPause:
-                self.playPressed()
-//            case .select:
-//                self.selectPressed()
-            case .leftArrow:
-                self.leftArrowPressed()
-            case .rightArrow:
-                self.rightArrowPressed()
             default:
                 break
             }
