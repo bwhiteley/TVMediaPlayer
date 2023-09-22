@@ -206,7 +206,7 @@ open class MediaPlayerViewController: UIViewController {
             NSNumber(value: UIPress.PressType.leftArrow.rawValue),
             NSNumber(value: UIPress.PressType.keyboardLeftArrow.rawValue),
         ]
-        leftLongPressGestureRecognizer.isEnabled = true
+        leftLongPressGestureRecognizer.isEnabled = false // disable until compatible with THEO
         self.view.addGestureRecognizer(leftLongPressGestureRecognizer)
         
         rightLongPressGestureRecognizer.addTarget(self, action: #selector(self.rightButtonLongPress))
@@ -214,7 +214,7 @@ open class MediaPlayerViewController: UIViewController {
             NSNumber(value: UIPress.PressType.rightArrow.rawValue),
             NSNumber(value: UIPress.PressType.keyboardRightArrow.rawValue),
         ]
-        rightLongPressGestureRecognizer.isEnabled = true
+        rightLongPressGestureRecognizer.isEnabled = false // disable until compabitle with THEO
         self.view.addGestureRecognizer(rightLongPressGestureRecognizer)
         
         let menuTap = UITapGestureRecognizer(target: self, action: #selector(menuPressed))
@@ -230,10 +230,18 @@ open class MediaPlayerViewController: UIViewController {
             NSNumber(value: UIPress.PressType.keyboardSpace.rawValue as Int),
         ]
         self.view.addGestureRecognizer(playTap)
+        
+        let selectTap = UITapGestureRecognizer(target: self, action: #selector(selectPressed))
+        selectTap.allowedPressTypes = [
+            NSNumber(value: UIPress.PressType.select.rawValue as Int),
+            NSNumber(value: UIPress.PressType.keyboardReturn.rawValue as Int),
+        ]
+        self.view.addGestureRecognizer(selectTap)
     }
     
     @objc private func rightButtonTapped() {
         if mediaPlayer.isPlayingAd { return }
+        if !controls.lineView.isHidden && !controls.lineView.isFocused { return }
         switch playerState {
         case .standardPlay, .pause:
             shortJumpAhead()
@@ -246,8 +254,8 @@ open class MediaPlayerViewController: UIViewController {
     }
 
     @objc private func leftButtonTapped() {
-        print("** left click")
         if mediaPlayer.isPlayingAd { return }
+        if !controls.lineView.isHidden && !controls.lineView.isFocused { return }
         switch playerState {
         case .standardPlay, .pause:
             shortJumpBack()
@@ -362,7 +370,7 @@ open class MediaPlayerViewController: UIViewController {
         return newPosition
     }
 
-    fileprivate func selectPressed() {
+    @objc fileprivate func selectPressed() {
         let state = playerState
         switch state {
         case .standardPlay, .rewind, .fastforward:
@@ -425,7 +433,7 @@ open class MediaPlayerViewController: UIViewController {
 
 extension MediaPlayerViewController: ControlsOverlayViewControllerDelegate {
     func scrubberButtonTapped() {
-        selectPressed()
+        //selectPressed()
     }
 }
 

@@ -144,9 +144,16 @@ internal class ControlsOverlayViewController: UIViewController {
                 })
             }
             else {
+                self.headerCustomContentView.isHidden = true
                 self.headerAndFooterElements.forEach {
-                    $0?.alpha = 0
+                    $0?.alpha = 0.1
                     $0?.isHidden = false
+                }
+                self.setNeedsFocusUpdate()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    // Delay appearance of custom header buttons, otherwise they
+                    // tend to have focus instead of lineView. 
+                    self.headerCustomContentView.isHidden = false
                 }
                 UIView.animate(withDuration: 0.3, animations: {
                     self.headerAndFooterElements.forEach { $0?.alpha = 1 }
@@ -223,6 +230,9 @@ internal class ControlsOverlayViewController: UIViewController {
             case let .fastforward(rate):
                 controlsState = .fastForward
                 fastForward(rate)
+            case let .rewind(rate):
+                controlsState = .rewind
+                //rewind(rate)
             default:
                 break
             }
@@ -383,9 +393,9 @@ internal class ControlsOverlayViewController: UIViewController {
         
         // These aren't subviews of the footer, so we have to adjust them individually. 
         // We should probably fix that sometime.
-        headerAndFooterElements = [titleLabel, subtitleLabel,
-            progressView, timeRemainingLabel, timeElapsedLabel,
-            headerView, footerView, lineView, adBreakContainer
+        headerAndFooterElements = [lineView, footerView, progressView, titleLabel, subtitleLabel,
+            timeRemainingLabel, timeElapsedLabel,
+            headerView, adBreakContainer
         ]
         
         if !wideMargins {
