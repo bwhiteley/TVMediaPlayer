@@ -193,6 +193,7 @@ internal class ControlsOverlayViewController: UIViewController {
             case .fastForward, .rewind:
                 controlsOverlayView.isHidden = false
                 setSnapshotViewsHidden(true, animated: false)
+                setHeaderAndFooterElementsHidden(false, animated: true)
                 fastForwardAndRewindLabel.isHidden = false
                 skipBackIcon.isHidden = true
                 skipForwardIcon.isHidden = true
@@ -232,9 +233,7 @@ internal class ControlsOverlayViewController: UIViewController {
                 fastForward(rate)
             case let .rewind(rate):
                 controlsState = .rewind
-                //rewind(rate)
-            default:
-                break
+                rewind(rate)
             }
         }
     }
@@ -315,6 +314,13 @@ internal class ControlsOverlayViewController: UIViewController {
         fastForwardAndRewindLabel.isHidden = false
         thumbnailContainer?.isHidden = true
         
+        let duration = mediaItem.length * (Double(1) - position) / rate
+        setHeaderAndFooterElementsHidden(false, animated: false)
+        UIView.animate(withDuration: 5) { // } duration) {
+            self.position = 1
+        }
+        print("**** FF", position)
+        
         if rate <= 2.0 {
             let token = Date()
             temporaryDisplayToken = token
@@ -327,8 +333,12 @@ internal class ControlsOverlayViewController: UIViewController {
         }
     }
     
+    func rewind(_ rate:Double) {
+    }
+    
     internal var position:Double = 0 {
         didSet {
+            //print("**** setting position to", position)
             var val = min(Double(1.0), position)
             val = max(Double(0), val)
             self.position = val

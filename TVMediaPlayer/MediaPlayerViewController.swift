@@ -97,10 +97,13 @@ open class MediaPlayerViewController: UIViewController {
             case .standardPlay:
                 _play()
             case let .rewind(rate):
-                mediaPlayer.rate = -rate
+                //mediaPlayer.rate = -rate
+                break
             case let .fastforward(rate):
-                mediaPlayer.rate = rate
-                controls.position = mediaPlayer.position
+                _pause()
+                //mediaPlayer.rate = rate
+                //controls.position = mediaPlayer.position
+                break
             case .pause:
                 _pause()
             }
@@ -440,7 +443,7 @@ extension MediaPlayerViewController: ControlsOverlayViewControllerDelegate {
 extension MediaPlayerViewController {
     override open func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         for item in presses {
-            //NSLog("***** presses began for type: %d", item.type.rawValue)
+            NSLog("***** presses began for type: %d", item.type.rawValue)
             switch item.type {
             default:
                 break
