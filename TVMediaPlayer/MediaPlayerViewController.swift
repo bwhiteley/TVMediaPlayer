@@ -169,13 +169,6 @@ open class MediaPlayerViewController: UIViewController {
         mediaPlayer.play()
         setupButtons()
         
-        if let controller = GCController.controllers().first,
-           let micro = controller.microGamepad {
-            micro.reportsAbsoluteDpadValues = true
-            micro.dpad.valueChangedHandler = { [weak self] (pad, x, y) in
-                self?.dpadChanged(x:x, y: y)
-            }
-        }
         
         controls.wideMargins = self.wideMargins
         controls.view.frame = self.view.bounds
@@ -185,6 +178,32 @@ open class MediaPlayerViewController: UIViewController {
         view.addSubview(controls.view)
         controls.didMove(toParent: self)
         addTapRecognizers()
+        
+        // The first time the player is loaded, there are no game controllers.
+        // So we register for a notification. For subsequent times, the
+        // notification is not fired but the game controller is present here.
+        NotificationCenter.default.addObserver(self, selector: #selector(discoveredGameController), name: NSNotification.Name.GCControllerDidConnect , object: nil)
+        
+        setupGameController()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc private func discoveredGameController() {
+        setupGameController()
+    }
+    
+    private func setupGameController() {
+        if let controller = GCController.controllers().first {
+            if let micro = controller.microGamepad {
+                micro.reportsAbsoluteDpadValues = true
+                micro.dpad.valueChangedHandler = { [weak self] (pad, x, y) in
+                    self?.dpadChanged(x:x, y: y)
+                }
+            }
+        }
     }
     
     private func addTapRecognizers() {
