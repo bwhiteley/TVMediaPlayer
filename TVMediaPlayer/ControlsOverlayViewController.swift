@@ -328,41 +328,6 @@ internal class ControlsOverlayViewController: UIViewController {
             }
         }
     }
-
-    func fastForward(_ rate:Double) {
-        let rateStr:String
-        if rate == Double(Int(rate)) {
-            rateStr = "\(Int(rate))"
-        }
-        else {
-            rateStr = "\(rate)"
-        }
-        fastForwardAndRewindLabel.text = "»\(rateStr)x"
-        fastForwardAndRewindLabel.isHidden = false
-        thumbnailContainer?.isHidden = true
-        
-        let duration = mediaItem.length * (Double(1) - position) / rate
-        setHeaderAndFooterElementsHidden(false, animated: false)
-        UIView.animate(withDuration: 5, delay: 0, options: [.curveLinear]) {
-            defer { self.controlsOverlayView?.layoutIfNeeded() }
-            self.position = 1
-        }
-        print("**** FF", position)
-        
-        if rate <= 2.0 {
-            let token = Date()
-            temporaryDisplayToken = token
-            delay(4) { [weak self] in
-                guard let sself = self else { return }
-                guard case let .fastforward(newRate) = sself.playerState , newRate == rate else { return }
-                guard sself.temporaryDisplayToken == token else { return }
-                self?.controlsState = .hidden
-            }
-        }
-    }
-    
-    func rewind(_ rate:Double) {
-    }
     
     internal var position:Double = 0 {
         didSet {
