@@ -16,8 +16,8 @@ internal class ControlsOverlayViewController: UIViewController {
     enum ControlsState {
         case hidden
         case snapshot
-        case fastForward
-        case rewind
+        case fastForward(_ rate: Double)
+        case rewind(_ rate: Double)
         case skipForward
         case skipBack
         case touches
@@ -197,6 +197,7 @@ internal class ControlsOverlayViewController: UIViewController {
                 fastForwardAndRewindLabel.isHidden = false
                 skipBackIcon.isHidden = true
                 skipForwardIcon.isHidden = true
+                setFFRewindLabel(state: controlsState)
             case .skipBack:
                 controlsOverlayView.isHidden = false
                 setSnapshotViewsHidden(true, animated: false)
@@ -229,20 +230,36 @@ internal class ControlsOverlayViewController: UIViewController {
             case .pause:
                 controlsState = .snapshot
             case let .fastforward(rate):
-                controlsState = .fastForward
-                fastForward(rate)
+                controlsState = .fastForward(rate)
+                //fastForward(rate)
             case let .rewind(rate):
-                controlsState = .rewind
-                rewind(rate)
+                controlsState = .rewind(rate)
+                //rewind(rate)
             }
         }
     }
     
+    private func setFFRewindLabel(state: ControlsState) {
+        var str: String
+        switch state {
+        case let .fastForward(rate):
+            str = "▶▶"
+            if rate >= 2 {
+                str += " \(Int(rate))"
+            }
+        case let .rewind(rate):
+            str = "◀◀"
+            if rate >= 2 {
+                str += " \(Int(rate))"
+            }
+        default:
+            str = ""
+        }
+        fastForwardAndRewindLabel.text = str
+    }
+    
     func userInteractionOccurred() {
-        touchTimer?.invalidate()
-        touchTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: false, block: { [weak self] timer in
-            self?.controlsState = .hidden
-        })
+        hideElementsAfterDelay()
     }
     
     override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -258,7 +275,7 @@ internal class ControlsOverlayViewController: UIViewController {
     func touchesBegan() {
         touching = true
         touchTimer?.invalidate()
-        if controlsState == .hidden {
+        if case .hidden = controlsState {
             controlsState = .touches
         }
     }
@@ -268,15 +285,25 @@ internal class ControlsOverlayViewController: UIViewController {
         touching = false
         switch controlsState {
         case .touches:
-            touchTimer?.invalidate()
-            touchTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: false, block: { [weak self] timer in
-                self?.controlsState = .hidden
-            })
+            hideElementsAfterDelay()
         case .skipForward, .skipBack:
             controlsState = .hidden
         default:
             break
         }
+    }
+    
+    private func hideElementsAfterDelay() {
+        touchTimer?.invalidate()
+        touchTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: false, block: { [weak self] timer in
+            guard let self else { return }
+            switch self.controlsState {
+            case .fastForward, .rewind:
+                return
+            default:
+                self.controlsState = .hidden
+            }
+        })
     }
     
     var dpadState:DPadState = .select {
@@ -316,7 +343,8 @@ internal class ControlsOverlayViewController: UIViewController {
         
         let duration = mediaItem.length * (Double(1) - position) / rate
         setHeaderAndFooterElementsHidden(false, animated: false)
-        UIView.animate(withDuration: 5) { // } duration) {
+        UIView.animate(withDuration: 5, delay: 0, options: [.curveLinear]) {
+            defer { self.controlsOverlayView?.layoutIfNeeded() }
             self.position = 1
         }
         print("**** FF", position)
@@ -473,7 +501,7 @@ internal class ControlsOverlayViewController: UIViewController {
     }
     
     func flashTimeBar() {
-        guard controlsState == .hidden else { return }
+        guard case .hidden = controlsState else { return }
         controlsState = .touches
         let token = Date()
         temporaryDisplayToken = token

@@ -53,8 +53,8 @@ enum PlayerState {
         }
     }
     
-    fileprivate static let rewindRates:[Double] = [2, 3, 4]
-    fileprivate static let fastforwardRates:[Double] = [2, 3, 4]
+    fileprivate static let rewindRates:[Double] = [1, 2, 3, 4]
+    fileprivate static let fastforwardRates:[Double] = [1, 2, 3, 4]
 }
 
 //

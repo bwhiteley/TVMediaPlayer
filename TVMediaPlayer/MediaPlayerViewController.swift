@@ -31,6 +31,7 @@ open class MediaPlayerViewController: UIViewController {
     private let leftLongPressGestureRecognizer = UILongPressGestureRecognizer()
     private let rightTapGestureRecognizer = UITapGestureRecognizer()
     private let rightLongPressGestureRecognizer = UILongPressGestureRecognizer()
+    private var ffRewindTimer: Timer?
     
     public init(mediaPlayer:MediaPlayerType, controlsCustomization: ControlsOverlayCustomization = .default) {
         self.mediaPlayer = mediaPlayer
@@ -92,21 +93,23 @@ open class MediaPlayerViewController: UIViewController {
     
     fileprivate var playerState:PlayerState = .standardPlay {
         didSet {
-            controls.playerState = playerState
             switch playerState {
             case .standardPlay:
                 _play()
             case let .rewind(rate):
+                _pause()
+                fastForward(rate: -rate)
                 //mediaPlayer.rate = -rate
                 break
             case let .fastforward(rate):
                 _pause()
+                fastForward(rate: rate)
                 //mediaPlayer.rate = rate
-                //controls.position = mediaPlayer.position
                 break
             case .pause:
                 _pause()
             }
+            controls.playerState = playerState
         }
     }
     
@@ -136,6 +139,7 @@ open class MediaPlayerViewController: UIViewController {
     }
     
     private func _play() {
+        ffRewindTimer?.invalidate()
         panGestureRecognizer.isEnabled = false
         mediaPlayer.play()
         mediaPlayer.rate = 1
@@ -167,9 +171,7 @@ open class MediaPlayerViewController: UIViewController {
         view.addSubview(canvasView)
         
         mediaPlayer.play()
-        setupButtons()
-        
-        
+
         controls.wideMargins = self.wideMargins
         controls.view.frame = self.view.bounds
         controls.view.autoresizingMask = [.flexibleHeight, .flexibleWidth]
@@ -207,6 +209,8 @@ open class MediaPlayerViewController: UIViewController {
     }
     
     private func addTapRecognizers() {
+        self.view.addGestureRecognizer(panGestureRecognizer)
+
         leftTapGestureRecognizer.addTarget(self, action: #selector(self.leftButtonTapped))
         leftTapGestureRecognizer.allowedPressTypes = [
             NSNumber(value: UIPress.PressType.leftArrow.rawValue),
@@ -228,7 +232,7 @@ open class MediaPlayerViewController: UIViewController {
             NSNumber(value: UIPress.PressType.leftArrow.rawValue),
             NSNumber(value: UIPress.PressType.keyboardLeftArrow.rawValue),
         ]
-        leftLongPressGestureRecognizer.isEnabled = false // disable until compatible with THEO
+        leftLongPressGestureRecognizer.isEnabled = true // disable until compatible with THEO
         self.view.addGestureRecognizer(leftLongPressGestureRecognizer)
         
         rightLongPressGestureRecognizer.addTarget(self, action: #selector(self.rightButtonLongPress))
@@ -236,7 +240,7 @@ open class MediaPlayerViewController: UIViewController {
             NSNumber(value: UIPress.PressType.rightArrow.rawValue),
             NSNumber(value: UIPress.PressType.keyboardRightArrow.rawValue),
         ]
-        rightLongPressGestureRecognizer.isEnabled = false // disable until compabitle with THEO
+        rightLongPressGestureRecognizer.isEnabled = true // disable until compabitle with THEO
         self.view.addGestureRecognizer(rightLongPressGestureRecognizer)
         
         let menuTap = UITapGestureRecognizer(target: self, action: #selector(menuPressed))
@@ -315,10 +319,61 @@ open class MediaPlayerViewController: UIViewController {
         }
     }
     
-    fileprivate func setupButtons() {
-        
-        self.view.addGestureRecognizer(panGestureRecognizer)
+    private func fastForward(rate: Double) {
+        /**
+         Some expiriments with Apple's player, with a 1hr show and a 2hr movie.
+         at 4x:
+         1hr: 37s
+         2h: 75s
+         ==> ~ 100x realtime
 
+         at 3x
+         1hr: 75s
+         ==> ~ 50x realtime
+
+         at 2x
+         10m: 25s
+         ==> 25x
+         
+         at 1x
+         10m: 75s
+         30m: 230s
+         ==> ~8x realtime
+         */
+        
+        ffRewindTimer?.invalidate()
+        
+        var accel: Double
+        switch abs(rate) {
+        case 0.5..<1.5:
+            accel = 8
+        case 1.5..<2.5:
+            accel = 25
+        case 2.5..<3.5:
+            accel = 50
+        case 3.5..<4.5:
+            accel = 100
+        default:
+            accel = 1
+        }
+        
+        if rate < 0 {
+            accel = -accel
+        }
+        
+        let timeSlice: Double = 0.1
+        let workLength = mediaPlayer.item.length
+        let skip = timeSlice * accel
+        ffRewindTimer = Timer.scheduledTimer(withTimeInterval: timeSlice, repeats: true) { [weak self] timer in
+            guard let self = self else { timer.invalidate(); return }
+            let newPosition = MediaPlayerViewController.newPositionByAdjustingPosition(self.mediaPlayer.position, bySeconds: skip, length: workLength)
+            self.controls.position = newPosition
+            self.mediaPlayer.position = newPosition
+            if newPosition <= 0 || newPosition >= 1 {
+                timer.invalidate()
+                self.pause()
+            }
+        }
     }
     
     @objc private func menuPressed() {
@@ -422,9 +477,9 @@ open class MediaPlayerViewController: UIViewController {
     @objc fileprivate func playPressed() {
         let state = playerState
         switch state {
-        case .pause:
+        case .pause, .fastforward, .rewind:
             playerState = .standardPlay
-        case .standardPlay, .fastforward, .rewind:
+        case .standardPlay:
             playerState = .pause
         }
     }
