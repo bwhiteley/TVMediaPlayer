@@ -98,11 +98,13 @@ open class MediaPlayerViewController: UIViewController {
                 _play()
             case let .rewind(rate):
                 _pause()
+                panGestureRecognizer.isEnabled = false
                 fastForward(rate: -rate)
                 //mediaPlayer.rate = -rate
                 break
             case let .fastforward(rate):
                 _pause()
+                panGestureRecognizer.isEnabled = false
                 fastForward(rate: rate)
                 //mediaPlayer.rate = rate
                 break
@@ -263,6 +265,23 @@ open class MediaPlayerViewController: UIViewController {
             NSNumber(value: UIPress.PressType.keyboardReturn.rawValue as Int),
         ]
         self.view.addGestureRecognizer(selectTap)
+        
+        let selectLongPress = UILongPressGestureRecognizer(target: self, action: #selector(selectLongPressed))
+        selectLongPress.allowedPressTypes = [
+            NSNumber(value: UIPress.PressType.select.rawValue as Int),
+        ]
+        self.view.addGestureRecognizer(selectLongPress)
+    }
+    
+    @objc func selectLongPressed() {
+        switch dpadState {
+        case .right:
+            rightButtonLongPress()
+        case .left:
+            leftButtonLongPress()
+        default:
+            break
+        }
     }
     
     @objc private func rightButtonTapped() {
@@ -294,7 +313,6 @@ open class MediaPlayerViewController: UIViewController {
     }
     
     @objc private func rightButtonLongPress() {
-        print("** right long press")
         if mediaPlayer.isPlayingAd { return }
         switch playerState {
         case .standardPlay, .pause:
@@ -307,7 +325,6 @@ open class MediaPlayerViewController: UIViewController {
     }
     
     @objc private func leftButtonLongPress() {
-        print("** left long press")
         if mediaPlayer.isPlayingAd { return }
         switch playerState {
         case .standardPlay, .pause:
@@ -460,9 +477,9 @@ open class MediaPlayerViewController: UIViewController {
                     playerState = .pause
                 }
             case .right:
-                shortJumpAhead()
+                rightButtonTapped()
             case .left:
-                shortJumpBack()
+                leftButtonTapped()
             case .up:
                 longJumpAhead()
             case .down:
