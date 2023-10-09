@@ -95,6 +95,12 @@ open class MediaPlayerViewController: UIViewController {
         didSet {
             switch playerState {
             case .standardPlay:
+                switch oldValue {
+                case .fastforward, .rewind:
+                    self.mediaPlayer.position = self.controls.position
+                default:
+                    break
+                }
                 _play()
             case let .rewind(rate):
                 _pause()
@@ -149,7 +155,12 @@ open class MediaPlayerViewController: UIViewController {
     
     private func _pause() {
         if !mediaPlayer.isPlayingAd {
-            controls.position = mediaPlayer.position
+            switch playerState {
+            case .fastforward, .rewind:
+                break
+            default:
+                controls.position = mediaPlayer.position
+            }
             panGestureRecognizer.isEnabled = true
         }
         mediaPlayer.pause()
@@ -383,9 +394,11 @@ open class MediaPlayerViewController: UIViewController {
         let skip = timeSlice * accel
         ffRewindTimer = Timer.scheduledTimer(withTimeInterval: timeSlice, repeats: true) { [weak self] timer in
             guard let self = self else { timer.invalidate(); return }
-            let newPosition = MediaPlayerViewController.newPositionByAdjustingPosition(self.mediaPlayer.position, bySeconds: skip, length: workLength)
+            let newPosition = MediaPlayerViewController.newPositionByAdjustingPosition(self.controls.position, bySeconds: skip, length: workLength)
             self.controls.position = newPosition
-            self.mediaPlayer.position = newPosition
+            if Int(Date().timeIntervalSinceReferenceDate * 10) % 10 == 0 {
+                self.mediaPlayer.position = newPosition
+            }
             if newPosition <= 0 || newPosition >= 1 {
                 timer.invalidate()
                 self.pause()
