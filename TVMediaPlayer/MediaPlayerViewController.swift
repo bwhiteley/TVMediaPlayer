@@ -499,7 +499,9 @@ open class MediaPlayerViewController: UIViewController {
                 longJumpBack()
             }
         case .pause:
-            mediaPlayer.position = controls.position
+            if !mediaPlayer.isPlayingAd {
+                mediaPlayer.position = controls.position
+            }
             playerState = .standardPlay
         }
     }
