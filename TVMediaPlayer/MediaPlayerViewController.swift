@@ -579,6 +579,18 @@ extension MediaPlayerViewController {
     }
 }
 
+extension MediaPlayerViewController {
+    open override func didUpdateFocus(in context: UIFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator) {
+        super.didUpdateFocus(in: context, with: coordinator)
+        if context.previouslyFocusedView === controls.lineView,
+           context.nextFocusedView !== controls.lineView {
+            panGestureRecognizer.isEnabled = false
+        } else if context.nextFocusedView === controls.lineView {
+            panGestureRecognizer.isEnabled = true
+        }
+    }
+}
+
 //
 //  Created by Bart Whiteley on 10/4/15.
 //  Copyright © 2015 SwiftBit. All rights reserved.
