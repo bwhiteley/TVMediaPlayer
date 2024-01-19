@@ -149,7 +149,6 @@ internal class ControlsOverlayViewController: UIViewController {
                     $0?.alpha = 0.1
                     $0?.isHidden = false
                 }
-                self.setNeedsFocusUpdate()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     // Delay appearance of custom header buttons, otherwise they
                     // tend to have focus instead of lineView. 
@@ -159,7 +158,6 @@ internal class ControlsOverlayViewController: UIViewController {
                     self.headerAndFooterElements.forEach { $0?.alpha = 1 }
                 }, completion: { _ in
                     completion?()
-                    self.setNeedsFocusUpdate()
                 })
             }
         }
