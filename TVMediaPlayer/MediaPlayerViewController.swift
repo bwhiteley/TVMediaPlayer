@@ -202,6 +202,14 @@ open class MediaPlayerViewController: UIViewController {
         setupGameController()
     }
     
+    var firstAppearance = true
+    open override func viewDidAppear(_ animated: Bool) {
+        if !firstAppearance {
+            controls.controlsState = .snapshot
+        }
+        firstAppearance = false
+    }
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
